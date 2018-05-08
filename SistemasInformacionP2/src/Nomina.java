@@ -93,7 +93,7 @@ public class Nomina{
 		Float[] pagosEmpresario = getPagosEmpresario(fila, hoja2); //[0]SSocial [1]FOGASA  [2]Desempleo [3]Formaci�n [4]Mutua //el resto creo que no se puede
 		String esExtra = (fecha.getMonth() == 5 || fecha.getMonth() == 11) ? "es una EXTRA": "";
 		persona.append("/n/tNombre: "+ fila[3] + " " + fila[1] + " "+ fila[2]+ "/n/tIBAN: " + fila[14] +"/n/tCATEGORIA: "
-				+ fila[5] + "/n/tBrutoAnual: "+ salarioAnual[1]+" " + esExtra + "/n/tFecha Alta: " + fila[8] + "/n/n/n/n");
+				+ fila[5] + "/n/tBrutoAnual: "+ salarioBruto[0]+" " + esExtra + "/n/tFecha Alta: " + fila[8] + "/n/n/n/n");
 		persona.append("/t/t/tN�mina fecha: " + fecha.toString());
 		empresa.append("/tEmpresa: " + fila[6] + " /n/tCIF: " + fila[7]);
 
