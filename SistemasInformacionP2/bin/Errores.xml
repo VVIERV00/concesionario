@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<trabajadores>
+  <trabajador ID="X9924125Q" Nombre="Mohamed" Apellido1="Ahmed" Apellido2="Ahmed" NombreEmpresa="TecnoProyectSL" Categoria="Analista" />
+  <trabajador ID="Y1337652D" Nombre="Alencar" Apellido1="Alves" Apellido2="Lidiane" NombreEmpresa="TecnoProyectSL" Categoria="Programador" />
+  <trabajador ID="Y1337652D" Nombre="Alencar" Apellido1="Alves" Apellido2="Lidiane" NombreEmpresa="TecnoProyectSL" Categoria="Programador" />
+  <trabajador ID="X1673150S" Nombre="Vittorio" Apellido1="Baglione" Apellido2=" " NombreEmpresa="TecnoProyectSL" Categoria="Cuidador" />
+  <trabajador ID="X1673150S" Nombre="Vittorio" Apellido1="Baglione" Apellido2="Baglione" NombreEmpresa="TecnoProyectSL" Categoria="Cuidador" />
+  <trabajador ID="Y0806930N" Nombre="Latifa" Apellido1="Boughaza" Apellido2=" " NombreEmpresa="Asoftware" Categoria="Auxiliar" />
+  <trabajador ID="Y0806930N" Nombre="Latifa Epfouad Erre" Apellido1="Boughaza" Apellido2="Boughaza" NombreEmpresa="TecnoLeonSL" Categoria="Auxiliar" />
+  <trabajador ID="24304263W" Nombre="Montserrat" Apellido1="Cembranos" Apellido2="Lombás" NombreEmpresa="TecnoLeonSL" Categoria="Limpiador" />
+  <trabajador ID="09548827D" Nombre="Khadouj" Apellido1="Elammary" Apellido2=" " NombreEmpresa="TecnoProyectSL" Categoria="Administrativo" />
+  <trabajador ID="01234567L" Nombre="Lorena" Apellido1="García" Apellido2="Pasado" NombreEmpresa="TecnoProyectSL" Categoria="Operador" />
+  <trabajador ID="09548827D" Nombre="Luisa" Apellido1="Gracia" Apellido2="Puerto" NombreEmpresa="TecnoProyectSL" Categoria="Limpiador" />
+  <trabajador ID="24304263W" Nombre="Fernando" Apellido1="Llamazares" Apellido2="Ramos" NombreEmpresa="TecnoProyectSL" Categoria="Jefe de sección" />
+  <trabajador ID="01234567L" Nombre="Juan" Apellido1="Martinez" Apellido2="Fernandez" NombreEmpresa="TecnoProyectSL" Categoria="Operador" />
+  <trabajador ID=" " Nombre="Pilar" Apellido1="Molina" Apellido2="Vara" NombreEmpresa="TecnoProyectSL" Categoria="Analista" />
+  <trabajador ID=" " Nombre="Paulina" Apellido1="Orejas" Apellido2="Díez" NombreEmpresa="PBlankSA" Categoria="Auxiliar" />
+</trabajadores>
