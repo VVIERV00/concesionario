@@ -1,10 +1,8 @@
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -49,9 +47,15 @@ public class ReadWriteExcelFile {
 				if(c==null) {
 					fila.add("");
 				}else if(c.getCellType() == Cell.CELL_TYPE_STRING){
+					System.out.println("str: " + c.getStringCellValue());
 					fila.add(c.getStringCellValue());
 				}else if(c.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-					fila.add(String.valueOf(c.getNumericCellValue()));
+						System.out.println("poo " + c.getDateCellValue());
+					
+					//System.out.println("num: " + c.getDateCellValue());
+					//System.out.println("num2: " + c.getNumericCellValue());
+
+					fila.add(String.valueOf(c.toString()));
 				}
 			}
 			//añado fila
@@ -88,7 +92,7 @@ public class ReadWriteExcelFile {
 		InputStream ExcelFileToRead = new FileInputStream(path);
 		XSSFWorkbook  wb = new XSSFWorkbook(ExcelFileToRead);
 		XSSFWorkbook test = new XSSFWorkbook(); 
-		XSSFSheet sheet = wb.getSheetAt(0);
+		XSSFSheet sheet = wb.getSheetAt(1);
 		XSSFRow row; 
 		XSSFCell cell;
 		ArrayList<ArrayList<String>> lista = new ArrayList<ArrayList<String>>();
@@ -113,7 +117,15 @@ public class ReadWriteExcelFile {
 				}else if(c.getCellType() == Cell.CELL_TYPE_STRING){
 					fila.add(c.getStringCellValue());
 				}else if(c.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-					fila.add(String.valueOf(c.getNumericCellValue()));
+					String celula = String.valueOf(c.getNumericCellValue());
+					//String frase = celula.substring(celula.length()-2, celula.length());
+					if (celula.endsWith(".0") ){
+						//System.out.println(true);
+
+						fila.add(String.valueOf(((Double)c.getNumericCellValue()).intValue()));
+					}else {
+						fila.add(String.valueOf(((Double)c.getNumericCellValue())));
+					}
 				}
 			}
 			//añado fila

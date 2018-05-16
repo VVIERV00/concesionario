@@ -81,10 +81,10 @@ public class Interfaz {
 		mes.setBounds(420, 166, 139, 36);
 		frame.getContentPane().add(mes);
 
-		JSpinner año = new JSpinner(new SpinnerNumberModel(1970, 1970, 2099, 1));
-		año.setFont(new Font("Courier New", Font.BOLD | Font.ITALIC, 13));
-		año.setBounds(598, 166, 139, 36);
-		frame.getContentPane().add(año);
+		JSpinner ano = new JSpinner(new SpinnerNumberModel(1970, 1970, 2099, 1));
+		ano.setFont(new Font("Courier New", Font.BOLD | Font.ITALIC, 13));
+		ano.setBounds(598, 166, 139, 36);
+		frame.getContentPane().add(ano);
 
 		JLabel lblNewLabel = new JLabel("Seleccione una Fecha");
 		lblNewLabel.setFont(new Font("Courier New", Font.BOLD | Font.ITALIC, 17));
@@ -148,7 +148,7 @@ public class Interfaz {
 		btnGenerar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				@SuppressWarnings("deprecation")
-				Date fecha = new Date((int)año.getValue(), (int)mes.getValue()-1, 1);
+				Date fecha = new Date((int)ano.getValue(), (int)mes.getValue()-1, 1);
 				Main m = new Main(JTextFieldCargo.getText(), JTextFieldDonde.getText(), fecha);
 				m.calcular();
 				

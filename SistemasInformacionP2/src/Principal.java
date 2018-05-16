@@ -82,7 +82,7 @@ public class Principal{
 	public static void corregirNIF() {
 		ReadWriteExcelFile con = new ReadWriteExcelFile();
 		try {
-			String [][] datos = con.readXLSXFile();
+			String [][] datos = con.readXLSXFile(null);
 			String [][] datosNuevos = copio(datos);
 
 			//procesar datos
@@ -161,7 +161,7 @@ public class Principal{
 			}
 
 			//escribo de nuevo en el excel
-			con.writeXLSXFile(datosNuevos);
+			con.writeXLSXFile(null, datosNuevos);
 			buscoDuplicados(datosNuevos);
 		} catch (IOException e) {
 		}

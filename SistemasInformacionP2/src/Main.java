@@ -15,7 +15,7 @@ public class Main {
 		// TODO Auto-generated method stub
 		ReadWriteExcelFile conector = new ReadWriteExcelFile();
 		try {
-			System.out.println(cargar+ " "+guardar);
+			System.out.println(cargar+ " " +guardar);
 			//creo directorio resources si no existe
 			File dir = new File(guardar+"/Resources");
 			if(!dir.exists()) {
@@ -36,6 +36,7 @@ public class Main {
 			conector.writeXLSXFile(guardar,datos);
 			
 			Nomina nom = new Nomina(datos, cargar, fecha);
+			nom.generar();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
