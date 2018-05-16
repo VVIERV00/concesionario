@@ -132,11 +132,11 @@ public class Nomina{
 		salarioMensual[0] /= 12;
 		Float[] salarioBruto = getBrutoAnual(salarioMensual[0], prorateo, fila, complementoYAntiguedad);//[0]:anual [1]:mensual
 
-		System.out.println("---"+fila);
+		///System.out.println("---"+fila);
 
-		System.out.println("---"+hoja2);
-		System.out.println("---"+salarioBruto[0]);
-		System.out.println("---"+prorateo);
+		//System.out.println("---"+hoja2);
+		//System.out.println("---"+salarioBruto[0]);
+		//System.out.println("---"+prorateo);
 
 		Float[] descuentos = getDescuentos(fila, hoja2, salarioBruto[0], prorateo); //[0]:SSocial [1]:Formacion [2]: Desempleo [3]: IRPF
 		Float[] salarioNeto = getNeto(fila, prorateo, complementoYAntiguedad, descuentos); //[0]:anual [1]:mensual
@@ -153,6 +153,7 @@ public class Nomina{
 
 	}//brutoAnual 
 	private Float [] getBrutoAnual(Float salarioMensual, Boolean prorateo, String[] fila, Float[] complementoYAntiguedad) {
+		System.out.println("sdsdasd" + complementoYAntiguedad[0]);
 		Float [] brutosAnuales = new Float[3] ;
 		float pro=0;
 		float complemensual;
@@ -265,7 +266,7 @@ public class Nomina{
 	 */
 	public static void crearPDF(Date fecha,String ruta, Float[] complementoYAntiguedad, Float[] descuentos,Float[] salarioMensual, Float[] salarioAnual, String [] fila, ArrayList<Map> hoja2, Float[] empresario) { 		int mes = fecha.getMonth()+1;
 	float totaldevengos = 0;
-	System.out.println(" fecha " + fecha + " ruta " + ruta + " compleYA " + complementoYAntiguedad + " des " + descuentos + " salaM " + salarioMensual + " salA " + salarioAnual + " entrepeneur " + empresario);
+	//System.out.println(" fecha " + fecha + " ruta " + ruta + " compleYA " + complementoYAntiguedad + " des " + descuentos + " salaM " + salarioMensual + " salA " + salarioAnual + " entrepeneur " + empresario);
 	if(complementoYAntiguedad.length!=6) {
 		System.out.println(" men " + salarioMensual[0] + salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1] );
 		totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1];
@@ -683,11 +684,12 @@ public class Nomina{
 		Float [] resultados;
 		//calcular complemento
 		Float complemento=Float.valueOf((Integer) hoja2.get(2).get(profesion));
+		//System.out.println("rrrr " + complemento);
 		//calcular antiguedad
 		String f = fila[8];
 		Date fechaAlta = convertirFecha(f);
-		for (String e: fila)
-			System.out.println(e);
+		//for (String e: fila)
+			//System.out.println(e);
 		//String pum = fila[8].substring(0, fila[8].length()-2);
 		//System.out.println("temp " + f);
 		//System.out.println("fechjaaa "  +  new Date()).toString());
@@ -782,7 +784,7 @@ public class Nomina{
 	}
 
 	public boolean fechaValida(String fechaI, String fechaF){
-		System.out.println("fecha 1 " + fechaI + " fecha2 " + fechaF);
+		//System.out.println("fecha 1 " + fechaI + " fecha2 " + fechaF);
 		if(fechaF=="") {
 			@SuppressWarnings("deprecation")
 			Date i = new Date(Integer.valueOf(fechaI.substring(6, 10)), Integer.valueOf(fechaI.substring(3,5))-1, Integer.valueOf(fechaI.substring(0, 2)));
