@@ -21,7 +21,7 @@ public class Nomina{
 	private  String[][] datos1;
 	private  String ruta;
 	private Date fecha;
-	
+
 	public static void main(String[] args) {
 		String[][] foo = null;
 		try {
@@ -31,7 +31,7 @@ public class Nomina{
 		}
 		Nomina objeto = new Nomina(foo,"SistemasInformacionII.xlsx", new Date(2012,04,01));
 		objeto.generar();
-		
+
 	}
 
 	public Nomina(String[][] datos1, String ruta, Date fecha) {
@@ -61,7 +61,7 @@ public class Nomina{
 			for(i = 0; i<8; i++) {
 				cuotas.put(hoja2.get(i+17).get(0), Float.valueOf(hoja2.get(i+17).get(1)));
 			}
-			
+
 			for (i = 0; i<7; i++) {
 				//System.out.println(hoja2.get(i+18).get(3) +" ---- "+ hoja2.get(i+18).get(4));
 
@@ -100,7 +100,7 @@ public class Nomina{
 			for (String[] fila: hoja1) {
 				if (!fila.equals(hoja1[0])){
 					//if(fechaValida(fila[8], fila[10])) {
-						this.generarNomina(fila, fecha, hoja2Map);
+					this.generarNomina(fila, fecha, hoja2Map);
 					//}
 				}
 			}
@@ -128,8 +128,16 @@ public class Nomina{
 		Float[] complementoYAntiguedad = getComplementos(fila, fecha, hoja2); //[0]:Complemento [1]:Antiguedad
 		Integer xx = (Integer) hoja2.get(0).get(fila[5]);
 		Float salarioMensual = Float.valueOf(Integer.toString(xx));
+
 		salarioMensual /= 12;
 		Float[] salarioBruto = getBrutoAnual(salarioMensual, prorateo, fila, complementoYAntiguedad);//[0]:anual [1]:mensual
+
+		System.out.println("---"+fila);
+
+		System.out.println("---"+hoja2);
+		System.out.println("---"+salarioBruto[0]);
+		System.out.println("---"+prorateo);
+
 		Float[] descuentos = getDescuentos(fila, hoja2, salarioBruto[0], prorateo); //[0]:SSocial [1]:Formacion [2]: Desempleo [3]: IRPF
 		Float[] salarioNeto = getNeto(fila, prorateo, complementoYAntiguedad, descuentos); //[0]:anual [1]:mensual
 		//Float[] salarioAnual = getAnual(salarioMensual, prorateo, fila); //multiplica por 12, 14 o menos si no trabajo todo el a�o. Fila para sacar la fechadeEntradaYAlta
@@ -141,7 +149,7 @@ public class Nomina{
 		empresa.append("/tEmpresa: " + fila[6] + " /n/tCIF: " + fila[7]);
 		String [] foo = {persona.toString(), empresa.toString()};
 		String rutaC = ruta +"Nomina" + fila[3] + fila[1] + fila[2];
-		this.crearPDF(fecha, rutaC, complementoYAntiguedad, descuentos, salarioBruto, salarioBruto, fila, hoja2);
+		this.crearPDF(fecha, rutaC, complementoYAntiguedad, descuentos, salarioBruto, salarioBruto, fila, hoja2, pagosEmpresario);
 
 	}//brutoAnual 
 	private Float [] getBrutoAnual(Float salarioMensual, Boolean prorateo, String[] fila, Float[] complementoYAntiguedad) {
@@ -149,25 +157,34 @@ public class Nomina{
 		float pro=0;
 		float complemensual;
 		//Tengo brutos anuales con y sin prorrata para los casos normales.
-		if(complementoYAntiguedad.length==2 && prorateo==true) { //caso normal
+		if(complementoYAntiguedad.length==3 && prorateo==true) { //caso normal
+			System.out.println("2");
 			complemensual=(complementoYAntiguedad[0])/14;
 			pro=(salarioMensual*2+complemensual*2+(complementoYAntiguedad[1]/14)*2)/12; // en 0 el comple y en 1 los trienios
 			brutosAnuales[1]=pro;
 			brutosAnuales[2]=complemensual;
 			brutosAnuales[0]=salarioMensual*12+pro*12+complemensual*12+complementoYAntiguedad[1];
-		}else if(complementoYAntiguedad.length==2 && prorateo==false){ //caso normal sin prorrata
+		}else if(complementoYAntiguedad.length==3 && prorateo==false){ //caso normal sin prorrata
+			System.out.println("3");
+
 			complemensual=(complementoYAntiguedad[0])/14;
 			brutosAnuales[2]=complemensual;
 			brutosAnuales[0]=salarioMensual*14+complemensual*14+complementoYAntiguedad[1];
 
 		}else { //Caso complicado  //Como funcionan los trienios si hay conflicto.
-			if(complementoYAntiguedad.length==5 && prorateo==true) {
+			System.out.println("4");
+
+			if(complementoYAntiguedad.length==6 && prorateo==true) {
+				System.out.println("5");
+
 				complemensual=(complementoYAntiguedad[0])/14;
 				brutosAnuales[2]=complemensual;
 				pro=(salarioMensual*2+complemensual*2+((complementoYAntiguedad[4]/14)*2)/12);
 				brutosAnuales[1]=pro;
 				brutosAnuales[0]= salarioMensual*12+pro*12+complemensual*12+complementoYAntiguedad[4];
-			}else if(complementoYAntiguedad.length==5 && prorateo==false) {
+			}else if(complementoYAntiguedad.length==6 && prorateo==false) {
+				System.out.println("6");
+
 				complemensual=(complementoYAntiguedad[0])/14;
 				brutosAnuales[2]=complemensual;
 				brutosAnuales[0]=salarioMensual*14+complemensual*14+complementoYAntiguedad[4];
@@ -198,9 +215,9 @@ public class Nomina{
 
 		Float sSocial = 0.0f; Float formacion = 0.0f; Float desempleo = 0.0f; Float irpf = 0.0f;
 
-		sSocial = (prorateo) ? (brutoAnual/ (Float)hoja2.get(5).get("Contingencias comunes TRABAJADOR")) : (((brutoAnual/14)*12) / (Float)hoja2.get(5).get("Contingencias comunes TRABAJADOR")) ;
-		formacion = (prorateo) ? (brutoAnual/ (Float)hoja2.get(5).get("Cuota formación TRABAJADOR")) : (((brutoAnual/14)*12) / (Float)hoja2.get(5).get("Contingencias comunes TRABAJADOR")) ;
-		desempleo = (prorateo) ? (brutoAnual/ (Float)hoja2.get(5).get("Cuota desempleo TRABAJADOR")) : (((brutoAnual/14)*12) / (Float)hoja2.get(5).get("Contingencias comunes TRABAJADOR")) ;
+		sSocial = (brutoAnual * (Float)hoja2.get(5).get("Cuota obrera general TRABAJADOR") / (12*100));
+		formacion = (brutoAnual * (Float)hoja2.get(5).get("Cuota formación TRABAJADOR") / (12*100));
+		desempleo = (brutoAnual * (Float)hoja2.get(5).get("Cuota desempleo TRABAJADOR") / (12*100));
 
 		Set set = hoja2.get(4).keySet();
 		Iterator iterador = set.iterator();
@@ -210,7 +227,7 @@ public class Nomina{
 			temp = siguiente;
 			siguiente = (Integer) iterador.next();
 		}
-		irpf = (prorateo) ? ((brutoAnual / 12) / (Integer) hoja2.get(4).get(temp)) : ((brutoAnual / 14) / (Integer) hoja2.get(4).get(temp));
+		irpf =  ((brutoAnual / 12) / (Float) hoja2.get(4).get(temp));
 
 		Float[] resultado = {sSocial, formacion, desempleo, irpf};
 
@@ -223,11 +240,10 @@ public class Nomina{
 	 * Recibe un array para dejar el pdf bonito con cuadrados
 	 * 
 	 */
-	public static void crearPDF(Date fecha,String ruta, Float[] complementoYAntiguedad, Float[] descuentos,Float[] salarioMensual, Float[] salarioAnual, String [] fila, ArrayList<Map> hoja2) { 
-		int mes = fecha.getMonth()+1;
+	   public static void crearPDF(Date fecha,String ruta, Float[] complementoYAntiguedad, Float[] descuentos,Float[] salarioMensual, Float[] salarioAnual, String [] fila, ArrayList<Map> hoja2, Float[] empresario) { 		int mes = fecha.getMonth()+1;
 		float totaldevengos = 0;
 		if(complementoYAntiguedad.length!=6) {
-			totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1]; //salarioBrutoMensual--devendosTotal
+			totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1];
 		}else if(complementoYAntiguedad[1]>mes) {
 			totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[3];
 		}else if(complementoYAntiguedad[1]<=mes) {
@@ -248,120 +264,390 @@ public class Nomina{
 			parrafo3.setAlignment(Element.ALIGN_LEFT);
 			parrafo4.setAlignment(Element.ALIGN_LEFT);
 			document.add(parrafo);
+
 			document.add(parrafo2);
+
 			document.add(parrafo3);
+
 			document.add(parrafo4);
 			Paragraph parrafo9 = new Paragraph("Destinatario:");
+
 			Paragraph parrafo10 = new Paragraph(fila[3]+" "+fila[1]+" "+fila[2]);
+
 			Paragraph parrafo11 = new Paragraph("DNI:"+fila[0]);
+
 			Paragraph parrafo12 = new Paragraph("Calle");
+
 			Paragraph parrafo13 = new Paragraph("CP León");
+
 			parrafo9.setIndentationLeft(400);
+
 			parrafo10.setAlignment(Element.ALIGN_RIGHT);
+
 			parrafo11.setAlignment(Element.ALIGN_RIGHT);
+
 			parrafo12.setAlignment(Element.ALIGN_RIGHT);
+
 			parrafo13.setAlignment(Element.ALIGN_RIGHT);
 			document.add(parrafo9);
+
 			document.add(parrafo10);
+
 			document.add(parrafo11);
+
 			document.add(parrafo12);
+
 			document.add(parrafo13);
-			Image imagen = Image.getInstance("resources/logo.jpeg");
+
+			Image imagen = Image.getInstance("C:/Users/barba/Desktop/logo.png");
+
 			imagen.scaleAbsolute(150f,150f);
+
 			imagen.setAbsolutePosition(50, 550);
+
 			document.add(imagen);
+
+
+
 			Paragraph nomina = new Paragraph("Nómina: Junio de 2018");
+
 			nomina.setAlignment(Element.ALIGN_CENTER);
+
 			document.add(nomina);
+
+
+
 			LineSeparator ls = new LineSeparator();
+
 			document.add(new Chunk(ls));
+
+
+
 			PdfPTable table = new PdfPTable(5);
+
 			table.getDefaultCell().setBorder(0);
+
 			table.addCell(" ");
+
 			table.addCell("cant.");
+
 			table.addCell("Imp. Unit.");
+
 			table.addCell("Dev.");
+
 			table.addCell("Deducc.");
+
+
+
+
+
+
+
+
+
 			table.getDefaultCell().setBorder(0);
+
 			table.addCell("Salario Base");
+
 			table.addCell("30");
+
 			table.addCell(""+salarioMensual[0]/30);
+
 			table.addCell(""+salarioMensual[0]);
+
 			table.addCell("");
+
+
+
+
+
 			table.addCell("Prorrata");
+
 			table.addCell("30");
+
 			table.addCell(""+salarioAnual[1]/30);
+
 			table.addCell(""+salarioAnual[1]);
+
 			table.addCell("");
+
+
+
 			table.addCell("Complemento");
+
 			table.addCell("30");
+
 			table.addCell(""+salarioAnual[2]/30);
+
 			table.addCell(""+salarioAnual[2]);
+
 			table.addCell("");
+
+
+
 			if(complementoYAntiguedad.length!=6) {
+
 				table.addCell("Antigüedad");
+
 				table.addCell(""+complementoYAntiguedad[2]);
+
 				table.addCell(""+(complementoYAntiguedad[1]/14)/30);
+
 				table.addCell(""+complementoYAntiguedad[1]/14);
+
 				table.addCell("");
+
 			}else {
+
 				if(complementoYAntiguedad[1]>mes) { //si el mes es mayor que el mes en que se hace la nomina
+
 					table.addCell("Antigüedad");
+
 					table.addCell(""+complementoYAntiguedad[5]); //Esto lo pasa alvaro
+
 					table.addCell(""+complementoYAntiguedad[3]/30);
+
 					table.addCell(""+complementoYAntiguedad[3]);
+
 					table.addCell("");
+
 				}else if(complementoYAntiguedad[1]<=mes) {
+
 					table.addCell("Antigüedad");
+
 					table.addCell(""+complementoYAntiguedad[5]); //Esto lo pasa alvaro
+
 					table.addCell(""+complementoYAntiguedad[2]/30);
+
 					table.addCell(""+complementoYAntiguedad[2]);
+
 					table.addCell("");
+
 				}
+
+
+
+
+
 			}
+
+
+
 			table.addCell("Contingencias Generales");
+
 			table.addCell("");
+
 			table.addCell("de"+totaldevengos);
+
 			table.addCell("");
+
 			table.addCell(""+descuentos[0]);
+
+
+
 			table.addCell("Desempleo");
+
 			table.addCell("");
+
 			table.addCell("de"+totaldevengos);
+
 			table.addCell("");
+
 			table.addCell(""+descuentos[2]);
+
+
+
 			table.addCell("Cuota formación");
+
 			table.addCell("");
+
 			table.addCell("de"+totaldevengos);
+
 			table.addCell("");
+
 			table.addCell(""+descuentos[1]);
+
+
+
 			table.addCell("IRPF");
+
 			table.addCell("");
+
 			table.addCell("de"+totaldevengos);
+
 			table.addCell("");
+
 			table.addCell(""+descuentos[3]);
+
+
+
+
+
 			table.addCell("Total Deducciones");
+
 			table.addCell("");
+
 			table.addCell("");
+
 			table.addCell("");
+
 			table.addCell(""+totaldeducciones);
+
+
+
 			table.addCell("Total Devengos");
+
 			table.addCell("");
+
 			table.addCell("");
+
 			table.addCell(""+totaldevengos);
+
 			table.addCell("");
+
+
+
+
+
 			table.addCell("");
+
 			table.addCell("");
+
 			table.addCell("");
+
 			table.addCell("Líquido a percibir");
+
 			table.addCell(""+liquidoPercibir);
+
+
+
+
+
+			PdfPTable table2 = new PdfPTable(5);
+
+			table2.getDefaultCell().setBorder(0);
+
+
+
+			table2.addCell("Cálculo empresario:BASE");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell(""+empresario[0]);
+
+
+
+
+
+			table2.addCell("Contingencias comunes 23,60%");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell(""+empresario[1]);
+
+
+
+			table2.addCell("Desempleo 6.7%");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell(""+empresario[2]);
+
+
+
+			table2.addCell("Formacion 0.6%");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell(""+empresario[3]);
+
+
+
+			table2.addCell("Accidentes de trabajo 1.0%");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell(""+empresario[4]);
+
+
+
+			table2.addCell("FOGASA 0.2%");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell(""+empresario[5]);
+
+
+
+			table2.addCell("TOTAL empresario");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell(""+empresario[6]);
+
+
+
+			table2.addCell("Coste total trabajador");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell("");
+
+			table2.addCell(""+empresario[7]);
+
 			document.add(table);
+
+			document.add(table2);
+
+
+
 			document.close();
+
 			writer.close();
+
 			System.out.println("PDF CREADO");
+
+
+
 		}
+
 		catch (Exception e) {
+
 			// TODO: handle exception
+
 		}
+
+
 
 	}
 
@@ -463,9 +749,9 @@ public class Nomina{
 		case "dic":
 			month = 12;
 			break;
-		
+
 		}
-		
+
 		year = Integer.parseInt(f.substring(7));
 		return new Date(year, month, day);
 	}
@@ -485,7 +771,7 @@ public class Nomina{
 			System.out.println("acaba");
 			return fecha.after(i)&&fecha.before(f);
 		}
-		
+
 	}
 
 
