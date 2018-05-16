@@ -126,7 +126,8 @@ public class Nomina{
 		StringBuilder empresa = new StringBuilder();
 		boolean prorateo = (fila[13] == "SI");
 		Float[] complementoYAntiguedad = getComplementos(fila, fecha, hoja2); //[0]:Complemento [1]:Antiguedad
-		Float salarioMensual = (Float) hoja2.get(0).get(fila[5]);
+		Integer xx = (Integer) hoja2.get(0).get(fila[5]);
+		Float salarioMensual = Float.valueOf(Integer.toString(xx));
 		salarioMensual /= 12;
 		Float[] salarioBruto = getBrutoAnual(salarioMensual, prorateo, fila, complementoYAntiguedad);//[0]:anual [1]:mensual
 		Float[] descuentos = getDescuentos(fila, hoja2, salarioBruto[0], prorateo); //[0]:SSocial [1]:Formacion [2]: Desempleo [3]: IRPF
@@ -373,13 +374,14 @@ public class Nomina{
 		Float complemento=Float.valueOf((Integer) hoja2.get(2).get(profesion));
 		//calcular antiguedad
 		String f = fila[8];
+		Date fechaAlta = convertirFecha(f);
 		for (String e: fila)
 			System.out.println(e);
 		//String pum = fila[8].substring(0, fila[8].length()-2);
-		//System.out.println("temp " + pum);
+		//System.out.println("temp " + f);
 		//System.out.println("fechjaaa "  +  new Date()).toString());
 		@SuppressWarnings("deprecation")
-		Date fechaAlta = new Date(Integer.valueOf(f.substring(6, 10)), Integer.valueOf(f.substring(3,5))-1, Integer.valueOf(f.substring(0, 2)));
+		//Date fechaAlta = new Date(Integer.valueOf(f.substring(6, 10)), Integer.valueOf(f.substring(3,5))-1, Integer.valueOf(f.substring(0, 2)));
 		int difA, mes;
 
 		mes = fechaAlta.getMonth()+1;
@@ -418,6 +420,54 @@ public class Nomina{
 			}
 		}
 		return resultados;
+	}
+
+	private Date convertirFecha(String f) {
+		int year, month = 0, day;
+		day = Integer.parseInt(f.substring(0, 2));
+		String m = f.substring(3,6);
+		switch(m) {
+		case "ene":
+			month = 1;
+			break;
+		case "feb":
+			month = 2;
+			break;
+		case "mar":
+			month = 3;
+			break;
+		case "abr":
+			month = 4;
+			break;
+		case "may":
+			month = 5;
+			break;
+		case "jun":
+			month = 6;
+			break;
+		case "jul":
+			month = 7;
+			break;
+		case "ago":
+			month = 8;
+			break;
+		case "sep":
+			month = 9;
+			break;
+		case "oct":
+			month = 10;
+			break;
+		case "nov":
+			month = 11;
+			break;
+		case "dic":
+			month = 12;
+			break;
+		
+		}
+		
+		year = Integer.parseInt(f.substring(7));
+		return new Date(year, month, day);
 	}
 
 	public boolean fechaValida(String fechaI, String fechaF){

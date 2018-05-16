@@ -50,9 +50,9 @@ public class ReadWriteExcelFile {
 					System.out.println("str: " + c.getStringCellValue());
 					fila.add(c.getStringCellValue());
 				}else if(c.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-						System.out.println("poo " + c.getDateCellValue());
+						System.out.println("poo " + c.getNumericCellValue());
 					
-					//System.out.println("num: " + c.getDateCellValue());
+					System.out.println("num: " + c.getDateCellValue());
 					//System.out.println("num2: " + c.getNumericCellValue());
 
 					fila.add(String.valueOf(c.toString()));
