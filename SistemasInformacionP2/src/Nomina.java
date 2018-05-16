@@ -127,10 +127,10 @@ public class Nomina{
 		boolean prorateo = (fila[13] == "SI");
 		Float[] complementoYAntiguedad = getComplementos(fila, fecha, hoja2); //[0]:Complemento [1]:Antiguedad
 		Integer xx = (Integer) hoja2.get(0).get(fila[5]);
-		Float salarioMensual = Float.valueOf(Integer.toString(xx));
+		Float[] salarioMensual = {Float.valueOf(Integer.toString(xx))};
 
-		salarioMensual /= 12;
-		Float[] salarioBruto = getBrutoAnual(salarioMensual, prorateo, fila, complementoYAntiguedad);//[0]:anual [1]:mensual
+		salarioMensual[0] /= 12;
+		Float[] salarioBruto = getBrutoAnual(salarioMensual[0], prorateo, fila, complementoYAntiguedad);//[0]:anual [1]:mensual
 
 		System.out.println("---"+fila);
 
@@ -149,7 +149,7 @@ public class Nomina{
 		empresa.append("/tEmpresa: " + fila[6] + " /n/tCIF: " + fila[7]);
 		String [] foo = {persona.toString(), empresa.toString()};
 		String rutaC = ruta +"Nomina" + fila[3] + fila[1] + fila[2];
-		this.crearPDF(fecha, rutaC, complementoYAntiguedad, descuentos, salarioBruto, salarioBruto, fila, hoja2, pagosEmpresario);
+		this.crearPDF(fecha, rutaC, complementoYAntiguedad, descuentos, salarioMensual, salarioBruto, fila, hoja2, pagosEmpresario);
 
 	}//brutoAnual 
 	private Float [] getBrutoAnual(Float salarioMensual, Boolean prorateo, String[] fila, Float[] complementoYAntiguedad) {
@@ -242,7 +242,9 @@ public class Nomina{
 	 */
 	   public static void crearPDF(Date fecha,String ruta, Float[] complementoYAntiguedad, Float[] descuentos,Float[] salarioMensual, Float[] salarioAnual, String [] fila, ArrayList<Map> hoja2, Float[] empresario) { 		int mes = fecha.getMonth()+1;
 		float totaldevengos = 0;
+		System.out.println(" fecha " + fecha + " ruta " + ruta + " compleYA " + complementoYAntiguedad + " des " + descuentos + " salaM " + salarioMensual + " salA " + salarioAnual + " entrepeneur " + empresario);
 		if(complementoYAntiguedad.length!=6) {
+			System.out.println(" men " + salarioMensual[0] + salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1] );
 			totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1];
 		}else if(complementoYAntiguedad[1]>mes) {
 			totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[3];
