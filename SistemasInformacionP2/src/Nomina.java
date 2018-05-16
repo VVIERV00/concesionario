@@ -148,35 +148,36 @@ public class Nomina{
 		persona.append("/t/t/tN�mina fecha: " + fecha.toString());
 		empresa.append("/tEmpresa: " + fila[6] + " /n/tCIF: " + fila[7]);
 		String [] foo = {persona.toString(), empresa.toString()};
-		String rutaC = ruta +"Nomina" + fila[3] + fila[1] + fila[2];
+		String rutaC = "Nomina" + fila[3] + fila[1] + fila[2]+".pdf";
 		this.crearPDF(fecha, rutaC, complementoYAntiguedad, descuentos, salarioMensual, salarioBruto, fila, hoja2, pagosEmpresario);
 
 	}//brutoAnual 
 	private Float [] getBrutoAnual(Float salarioMensual, Boolean prorateo, String[] fila, Float[] complementoYAntiguedad) {
-		System.out.println("sdsdasd" + complementoYAntiguedad[0]);
+		//System.out.println("sdsdasd" + complementoYAntiguedad[0]);
 		Float [] brutosAnuales = new Float[3] ;
 		float pro=0;
 		float complemensual;
 		//Tengo brutos anuales con y sin prorrata para los casos normales.
 		if(complementoYAntiguedad.length==3 && prorateo==true) { //caso normal
-			System.out.println("2");
+			
+			//System.out.println("2");
 			complemensual=(complementoYAntiguedad[0])/14;
 			pro=(salarioMensual*2+complemensual*2+(complementoYAntiguedad[1]/14)*2)/12; // en 0 el comple y en 1 los trienios
 			brutosAnuales[1]=pro;
 			brutosAnuales[2]=complemensual;
 			brutosAnuales[0]=salarioMensual*12+pro*12+complemensual*12+complementoYAntiguedad[1];
 		}else if(complementoYAntiguedad.length==3 && prorateo==false){ //caso normal sin prorrata
-			System.out.println("3");
-
+			//System.out.println("3");
+			brutosAnuales[1]=0.0f;
 			complemensual=(complementoYAntiguedad[0])/14;
 			brutosAnuales[2]=complemensual;
 			brutosAnuales[0]=salarioMensual*14+complemensual*14+complementoYAntiguedad[1];
 
 		}else { //Caso complicado  //Como funcionan los trienios si hay conflicto.
-			System.out.println("4");
+			//System.out.println("4");
 
 			if(complementoYAntiguedad.length==6 && prorateo==true) {
-				System.out.println("5");
+				//System.out.println("5");
 
 				complemensual=(complementoYAntiguedad[0])/14;
 				brutosAnuales[2]=complemensual;
@@ -184,8 +185,8 @@ public class Nomina{
 				brutosAnuales[1]=pro;
 				brutosAnuales[0]= salarioMensual*12+pro*12+complemensual*12+complementoYAntiguedad[4];
 			}else if(complementoYAntiguedad.length==6 && prorateo==false) {
-				System.out.println("6");
-
+				//System.out.println("6");
+				brutosAnuales[1]=0.0f;
 				complemensual=(complementoYAntiguedad[0])/14;
 				brutosAnuales[2]=complemensual;
 				brutosAnuales[0]=salarioMensual*14+complemensual*14+complementoYAntiguedad[4];
@@ -224,7 +225,7 @@ public class Nomina{
 
 		resultado[7] = resultado[0] + resultado[6];//total empresario trabajador
 
-		return null;
+		return resultado;
 
 	}
 
@@ -245,12 +246,14 @@ public class Nomina{
 
 		Set set = hoja2.get(4).keySet();
 		Iterator iterador = set.iterator();
-		Integer temp = null;
+		
 		Integer siguiente = (Integer) iterador.next();
+		Integer temp = siguiente;
 		while (iterador.hasNext() && siguiente < brutoAnual) {
 			temp = siguiente;
 			siguiente = (Integer) iterador.next();
 		}
+		//System.out.println("quehaa " + temp);
 		irpf =  ((brutoAnual / 12) / (Float) hoja2.get(4).get(temp));
 
 		Float[] resultado = {sSocial, formacion, desempleo, irpf};
@@ -265,10 +268,11 @@ public class Nomina{
 	 * 
 	 */
 	public static void crearPDF(Date fecha,String ruta, Float[] complementoYAntiguedad, Float[] descuentos,Float[] salarioMensual, Float[] salarioAnual, String [] fila, ArrayList<Map> hoja2, Float[] empresario) { 		int mes = fecha.getMonth()+1;
+	System.out.println("PDF EMPIEZA");
 	float totaldevengos = 0;
 	//System.out.println(" fecha " + fecha + " ruta " + ruta + " compleYA " + complementoYAntiguedad + " des " + descuentos + " salaM " + salarioMensual + " salA " + salarioAnual + " entrepeneur " + empresario);
 	if(complementoYAntiguedad.length!=6) {
-		System.out.println(" men " + salarioMensual[0] + salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1] );
+		//System.out.println(" men " + salarioMensual[0] + salarioAnual[1] + " -- "+salarioAnual[2]+"   "+complementoYAntiguedad[1] );
 		totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1];
 	}else if(complementoYAntiguedad[1]>mes) {
 		totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[3];
@@ -325,7 +329,7 @@ public class Nomina{
 
 		document.add(parrafo13);
 
-		Image imagen = Image.getInstance("C:/Users/barba/Desktop/logo.png");
+		Image imagen = Image.getInstance("resources/logo.jpeg");
 
 		imagen.scaleAbsolute(150f,150f);
 
@@ -669,7 +673,7 @@ public class Nomina{
 
 	catch (Exception e) {
 
-		// TODO: handle exception
+		e.printStackTrace();
 
 	}
 
@@ -683,7 +687,7 @@ public class Nomina{
 		String profesion = fila[5];
 		Float [] resultados;
 		//calcular complemento
-		Float complemento=Float.valueOf((Integer) hoja2.get(2).get(profesion));
+		Float complemento=Float.valueOf((Integer) hoja2.get(1).get(profesion));
 		//System.out.println("rrrr " + complemento);
 		//calcular antiguedad
 		String f = fila[8];
