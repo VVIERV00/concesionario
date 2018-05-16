@@ -141,7 +141,7 @@ public class Nomina{
 		Float[] descuentos = getDescuentos(fila, hoja2, salarioBruto[0], prorateo); //[0]:SSocial [1]:Formacion [2]: Desempleo [3]: IRPF
 		Float[] salarioNeto = getNeto(fila, prorateo, complementoYAntiguedad, descuentos); //[0]:anual [1]:mensual
 		//Float[] salarioAnual = getAnual(salarioMensual, prorateo, fila); //multiplica por 12, 14 o menos si no trabajo todo el a�o. Fila para sacar la fechadeEntradaYAlta
-		Float[] pagosEmpresario = getPagosEmpresario(fila, hoja2); //[0]SSocial [1]FOGASA  [2]Desempleo [3]Formaci�n [4]Mutua //el resto creo que no se puede
+		Float[] pagosEmpresario = getPagosEmpresario(fila, hoja2, salarioBruto); //[0]SSocial [1]FOGASA  [2]Desempleo [3]Formaci�n [4]Mutua //el resto creo que no se puede
 		String esExtra = (fecha.getMonth() == 5 || fecha.getMonth() == 11) ? "es una EXTRA": "";
 		persona.append("/n/tNombre: "+ fila[3] + " " + fila[1] + " "+ fila[2]+ "/n/tIBAN: " + fila[14] +"/n/tCATEGORIA: "
 				+ fila[5] + "/n/tBrutoAnual: "+ salarioBruto[0]+" " + esExtra + "/n/tFecha Alta: " + fila[8] + "/n/n/n/n");
@@ -199,9 +199,32 @@ public class Nomina{
 		return brutosAnuales;
 	}
 
-	private  Float[] getPagosEmpresario(String[] fila, ArrayList<Map> hoja2) {
-		// TODO Auto-generated method stub
+	private  Float[] getPagosEmpresario(String[] fila, ArrayList<Map> hoja2, Float [] bruto) {//code while dreaming with ONEPLUS 6, prone to errors
+
+		// Pagos empresario
+
+		Float [] resultado = new Float [8];
+
+		float brutoAnual = bruto[0];
+
+		resultado[0]  = brutoAnual/12;//base empresario
+
+		resultado[1] = ((float)hoja2.get(5).get("Contingencias comunes EMPRESARIO")*(brutoAnual/12)) /100;
+
+		resultado[2] = ((float)hoja2.get(5).get("Desempleo EMPRESARIO")*(brutoAnual/12)) /100;
+
+		resultado[3] = ((float)hoja2.get(5).get("Formacion EMPRESARIO")*(brutoAnual/12)) /100;
+
+		resultado[4] = ((float)hoja2.get(5).get("Accidentes trabajo EMPRESARIO")*(brutoAnual/12)) /100;
+
+		resultado[5] = ((float)hoja2.get(5).get("Fogasa EMPRESARIO")*(brutoAnual/12)) /100;
+
+		resultado[6] = resultado[1]+resultado[2]+resultado[3]+resultado[4]+resultado[5];//total empresario
+
+		resultado[7] = resultado[0] + resultado[6];//total empresario trabajador
+
 		return null;
+
 	}
 
 	private Float[] getNeto(String[] fila, boolean prorateo, Float[] complementoYAntiguedad,Float[] descuentos) { //anual y mensual
@@ -240,414 +263,414 @@ public class Nomina{
 	 * Recibe un array para dejar el pdf bonito con cuadrados
 	 * 
 	 */
-	   public static void crearPDF(Date fecha,String ruta, Float[] complementoYAntiguedad, Float[] descuentos,Float[] salarioMensual, Float[] salarioAnual, String [] fila, ArrayList<Map> hoja2, Float[] empresario) { 		int mes = fecha.getMonth()+1;
-		float totaldevengos = 0;
-		System.out.println(" fecha " + fecha + " ruta " + ruta + " compleYA " + complementoYAntiguedad + " des " + descuentos + " salaM " + salarioMensual + " salA " + salarioAnual + " entrepeneur " + empresario);
+	public static void crearPDF(Date fecha,String ruta, Float[] complementoYAntiguedad, Float[] descuentos,Float[] salarioMensual, Float[] salarioAnual, String [] fila, ArrayList<Map> hoja2, Float[] empresario) { 		int mes = fecha.getMonth()+1;
+	float totaldevengos = 0;
+	System.out.println(" fecha " + fecha + " ruta " + ruta + " compleYA " + complementoYAntiguedad + " des " + descuentos + " salaM " + salarioMensual + " salA " + salarioAnual + " entrepeneur " + empresario);
+	if(complementoYAntiguedad.length!=6) {
+		System.out.println(" men " + salarioMensual[0] + salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1] );
+		totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1];
+	}else if(complementoYAntiguedad[1]>mes) {
+		totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[3];
+	}else if(complementoYAntiguedad[1]<=mes) {
+		totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[2];
+	}
+	float totaldeducciones = descuentos[0]+descuentos[1]+descuentos[2]+descuentos[3];
+	float liquidoPercibir = totaldevengos-totaldeducciones;
+	Document document = new Document();
+	try {
+		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(ruta));
+		document.open();
+		Paragraph parrafo = new Paragraph("TecnoProyectSL                                                                                                              IBAN: ES97"+fila[14]);
+		Paragraph parrafo2 = new Paragraph("CIF: P2472621I                                                                                                             Categoría:"+fila[1]);
+		Paragraph parrafo3 = new Paragraph("Avenida de la facultad - 6                                                                                               Bruto anual:"+salarioAnual[0]);
+		Paragraph parrafo4 = new Paragraph("24001 León                                                                                                             Fecha de alta:"+fila[8]);
+		parrafo.setAlignment(Element.ALIGN_LEFT);
+		parrafo2.setAlignment(Element.ALIGN_LEFT);
+		parrafo3.setAlignment(Element.ALIGN_LEFT);
+		parrafo4.setAlignment(Element.ALIGN_LEFT);
+		document.add(parrafo);
+
+		document.add(parrafo2);
+
+		document.add(parrafo3);
+
+		document.add(parrafo4);
+		Paragraph parrafo9 = new Paragraph("Destinatario:");
+
+		Paragraph parrafo10 = new Paragraph(fila[3]+" "+fila[1]+" "+fila[2]);
+
+		Paragraph parrafo11 = new Paragraph("DNI:"+fila[0]);
+
+		Paragraph parrafo12 = new Paragraph("Calle");
+
+		Paragraph parrafo13 = new Paragraph("CP León");
+
+		parrafo9.setIndentationLeft(400);
+
+		parrafo10.setAlignment(Element.ALIGN_RIGHT);
+
+		parrafo11.setAlignment(Element.ALIGN_RIGHT);
+
+		parrafo12.setAlignment(Element.ALIGN_RIGHT);
+
+		parrafo13.setAlignment(Element.ALIGN_RIGHT);
+		document.add(parrafo9);
+
+		document.add(parrafo10);
+
+		document.add(parrafo11);
+
+		document.add(parrafo12);
+
+		document.add(parrafo13);
+
+		Image imagen = Image.getInstance("C:/Users/barba/Desktop/logo.png");
+
+		imagen.scaleAbsolute(150f,150f);
+
+		imagen.setAbsolutePosition(50, 550);
+
+		document.add(imagen);
+
+
+
+		Paragraph nomina = new Paragraph("Nómina: Junio de 2018");
+
+		nomina.setAlignment(Element.ALIGN_CENTER);
+
+		document.add(nomina);
+
+
+
+		LineSeparator ls = new LineSeparator();
+
+		document.add(new Chunk(ls));
+
+
+
+		PdfPTable table = new PdfPTable(5);
+
+		table.getDefaultCell().setBorder(0);
+
+		table.addCell(" ");
+
+		table.addCell("cant.");
+
+		table.addCell("Imp. Unit.");
+
+		table.addCell("Dev.");
+
+		table.addCell("Deducc.");
+
+
+
+
+
+
+
+
+
+		table.getDefaultCell().setBorder(0);
+
+		table.addCell("Salario Base");
+
+		table.addCell("30");
+
+		table.addCell(""+salarioMensual[0]/30);
+
+		table.addCell(""+salarioMensual[0]);
+
+		table.addCell("");
+
+
+
+
+
+		table.addCell("Prorrata");
+
+		table.addCell("30");
+
+		table.addCell(""+salarioAnual[1]/30);
+
+		table.addCell(""+salarioAnual[1]);
+
+		table.addCell("");
+
+
+
+		table.addCell("Complemento");
+
+		table.addCell("30");
+
+		table.addCell(""+salarioAnual[2]/30);
+
+		table.addCell(""+salarioAnual[2]);
+
+		table.addCell("");
+
+
+
 		if(complementoYAntiguedad.length!=6) {
-			System.out.println(" men " + salarioMensual[0] + salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1] );
-			totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[1];
-		}else if(complementoYAntiguedad[1]>mes) {
-			totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[3];
-		}else if(complementoYAntiguedad[1]<=mes) {
-			totaldevengos=salarioMensual[0]+salarioAnual[1]+salarioAnual[2]+complementoYAntiguedad[2];
-		}
-		float totaldeducciones = descuentos[0]+descuentos[1]+descuentos[2]+descuentos[3];
-		float liquidoPercibir = totaldevengos-totaldeducciones;
-		Document document = new Document();
-		try {
-			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(ruta));
-			document.open();
-			Paragraph parrafo = new Paragraph("TecnoProyectSL                                                                                                              IBAN: ES97"+fila[14]);
-			Paragraph parrafo2 = new Paragraph("CIF: P2472621I                                                                                                             Categoría:"+fila[1]);
-			Paragraph parrafo3 = new Paragraph("Avenida de la facultad - 6                                                                                               Bruto anual:"+salarioAnual[0]);
-			Paragraph parrafo4 = new Paragraph("24001 León                                                                                                             Fecha de alta:"+fila[8]);
-			parrafo.setAlignment(Element.ALIGN_LEFT);
-			parrafo2.setAlignment(Element.ALIGN_LEFT);
-			parrafo3.setAlignment(Element.ALIGN_LEFT);
-			parrafo4.setAlignment(Element.ALIGN_LEFT);
-			document.add(parrafo);
 
-			document.add(parrafo2);
+			table.addCell("Antigüedad");
 
-			document.add(parrafo3);
+			table.addCell(""+complementoYAntiguedad[2]);
 
-			document.add(parrafo4);
-			Paragraph parrafo9 = new Paragraph("Destinatario:");
+			table.addCell(""+(complementoYAntiguedad[1]/14)/30);
 
-			Paragraph parrafo10 = new Paragraph(fila[3]+" "+fila[1]+" "+fila[2]);
-
-			Paragraph parrafo11 = new Paragraph("DNI:"+fila[0]);
-
-			Paragraph parrafo12 = new Paragraph("Calle");
-
-			Paragraph parrafo13 = new Paragraph("CP León");
-
-			parrafo9.setIndentationLeft(400);
-
-			parrafo10.setAlignment(Element.ALIGN_RIGHT);
-
-			parrafo11.setAlignment(Element.ALIGN_RIGHT);
-
-			parrafo12.setAlignment(Element.ALIGN_RIGHT);
-
-			parrafo13.setAlignment(Element.ALIGN_RIGHT);
-			document.add(parrafo9);
-
-			document.add(parrafo10);
-
-			document.add(parrafo11);
-
-			document.add(parrafo12);
-
-			document.add(parrafo13);
-
-			Image imagen = Image.getInstance("C:/Users/barba/Desktop/logo.png");
-
-			imagen.scaleAbsolute(150f,150f);
-
-			imagen.setAbsolutePosition(50, 550);
-
-			document.add(imagen);
-
-
-
-			Paragraph nomina = new Paragraph("Nómina: Junio de 2018");
-
-			nomina.setAlignment(Element.ALIGN_CENTER);
-
-			document.add(nomina);
-
-
-
-			LineSeparator ls = new LineSeparator();
-
-			document.add(new Chunk(ls));
-
-
-
-			PdfPTable table = new PdfPTable(5);
-
-			table.getDefaultCell().setBorder(0);
-
-			table.addCell(" ");
-
-			table.addCell("cant.");
-
-			table.addCell("Imp. Unit.");
-
-			table.addCell("Dev.");
-
-			table.addCell("Deducc.");
-
-
-
-
-
-
-
-
-
-			table.getDefaultCell().setBorder(0);
-
-			table.addCell("Salario Base");
-
-			table.addCell("30");
-
-			table.addCell(""+salarioMensual[0]/30);
-
-			table.addCell(""+salarioMensual[0]);
+			table.addCell(""+complementoYAntiguedad[1]/14);
 
 			table.addCell("");
 
+		}else {
 
-
-
-
-			table.addCell("Prorrata");
-
-			table.addCell("30");
-
-			table.addCell(""+salarioAnual[1]/30);
-
-			table.addCell(""+salarioAnual[1]);
-
-			table.addCell("");
-
-
-
-			table.addCell("Complemento");
-
-			table.addCell("30");
-
-			table.addCell(""+salarioAnual[2]/30);
-
-			table.addCell(""+salarioAnual[2]);
-
-			table.addCell("");
-
-
-
-			if(complementoYAntiguedad.length!=6) {
+			if(complementoYAntiguedad[1]>mes) { //si el mes es mayor que el mes en que se hace la nomina
 
 				table.addCell("Antigüedad");
 
-				table.addCell(""+complementoYAntiguedad[2]);
+				table.addCell(""+complementoYAntiguedad[5]); //Esto lo pasa alvaro
 
-				table.addCell(""+(complementoYAntiguedad[1]/14)/30);
+				table.addCell(""+complementoYAntiguedad[3]/30);
 
-				table.addCell(""+complementoYAntiguedad[1]/14);
+				table.addCell(""+complementoYAntiguedad[3]);
 
 				table.addCell("");
 
-			}else {
+			}else if(complementoYAntiguedad[1]<=mes) {
 
-				if(complementoYAntiguedad[1]>mes) { //si el mes es mayor que el mes en que se hace la nomina
+				table.addCell("Antigüedad");
 
-					table.addCell("Antigüedad");
+				table.addCell(""+complementoYAntiguedad[5]); //Esto lo pasa alvaro
 
-					table.addCell(""+complementoYAntiguedad[5]); //Esto lo pasa alvaro
+				table.addCell(""+complementoYAntiguedad[2]/30);
 
-					table.addCell(""+complementoYAntiguedad[3]/30);
+				table.addCell(""+complementoYAntiguedad[2]);
 
-					table.addCell(""+complementoYAntiguedad[3]);
-
-					table.addCell("");
-
-				}else if(complementoYAntiguedad[1]<=mes) {
-
-					table.addCell("Antigüedad");
-
-					table.addCell(""+complementoYAntiguedad[5]); //Esto lo pasa alvaro
-
-					table.addCell(""+complementoYAntiguedad[2]/30);
-
-					table.addCell(""+complementoYAntiguedad[2]);
-
-					table.addCell("");
-
-				}
-
-
-
-
+				table.addCell("");
 
 			}
 
 
 
-			table.addCell("Contingencias Generales");
-
-			table.addCell("");
-
-			table.addCell("de"+totaldevengos);
-
-			table.addCell("");
-
-			table.addCell(""+descuentos[0]);
-
-
-
-			table.addCell("Desempleo");
-
-			table.addCell("");
-
-			table.addCell("de"+totaldevengos);
-
-			table.addCell("");
-
-			table.addCell(""+descuentos[2]);
-
-
-
-			table.addCell("Cuota formación");
-
-			table.addCell("");
-
-			table.addCell("de"+totaldevengos);
-
-			table.addCell("");
-
-			table.addCell(""+descuentos[1]);
-
-
-
-			table.addCell("IRPF");
-
-			table.addCell("");
-
-			table.addCell("de"+totaldevengos);
-
-			table.addCell("");
-
-			table.addCell(""+descuentos[3]);
-
-
-
-
-
-			table.addCell("Total Deducciones");
-
-			table.addCell("");
-
-			table.addCell("");
-
-			table.addCell("");
-
-			table.addCell(""+totaldeducciones);
-
-
-
-			table.addCell("Total Devengos");
-
-			table.addCell("");
-
-			table.addCell("");
-
-			table.addCell(""+totaldevengos);
-
-			table.addCell("");
-
-
-
-
-
-			table.addCell("");
-
-			table.addCell("");
-
-			table.addCell("");
-
-			table.addCell("Líquido a percibir");
-
-			table.addCell(""+liquidoPercibir);
-
-
-
-
-
-			PdfPTable table2 = new PdfPTable(5);
-
-			table2.getDefaultCell().setBorder(0);
-
-
-
-			table2.addCell("Cálculo empresario:BASE");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell(""+empresario[0]);
-
-
-
-
-
-			table2.addCell("Contingencias comunes 23,60%");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell(""+empresario[1]);
-
-
-
-			table2.addCell("Desempleo 6.7%");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell(""+empresario[2]);
-
-
-
-			table2.addCell("Formacion 0.6%");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell(""+empresario[3]);
-
-
-
-			table2.addCell("Accidentes de trabajo 1.0%");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell(""+empresario[4]);
-
-
-
-			table2.addCell("FOGASA 0.2%");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell(""+empresario[5]);
-
-
-
-			table2.addCell("TOTAL empresario");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell(""+empresario[6]);
-
-
-
-			table2.addCell("Coste total trabajador");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell("");
-
-			table2.addCell(""+empresario[7]);
-
-			document.add(table);
-
-			document.add(table2);
-
-
-
-			document.close();
-
-			writer.close();
-
-			System.out.println("PDF CREADO");
-
 
 
 		}
 
-		catch (Exception e) {
 
-			// TODO: handle exception
 
-		}
+		table.addCell("Contingencias Generales");
+
+		table.addCell("");
+
+		table.addCell("de"+totaldevengos);
+
+		table.addCell("");
+
+		table.addCell(""+descuentos[0]);
+
+
+
+		table.addCell("Desempleo");
+
+		table.addCell("");
+
+		table.addCell("de"+totaldevengos);
+
+		table.addCell("");
+
+		table.addCell(""+descuentos[2]);
+
+
+
+		table.addCell("Cuota formación");
+
+		table.addCell("");
+
+		table.addCell("de"+totaldevengos);
+
+		table.addCell("");
+
+		table.addCell(""+descuentos[1]);
+
+
+
+		table.addCell("IRPF");
+
+		table.addCell("");
+
+		table.addCell("de"+totaldevengos);
+
+		table.addCell("");
+
+		table.addCell(""+descuentos[3]);
+
+
+
+
+
+		table.addCell("Total Deducciones");
+
+		table.addCell("");
+
+		table.addCell("");
+
+		table.addCell("");
+
+		table.addCell(""+totaldeducciones);
+
+
+
+		table.addCell("Total Devengos");
+
+		table.addCell("");
+
+		table.addCell("");
+
+		table.addCell(""+totaldevengos);
+
+		table.addCell("");
+
+
+
+
+
+		table.addCell("");
+
+		table.addCell("");
+
+		table.addCell("");
+
+		table.addCell("Líquido a percibir");
+
+		table.addCell(""+liquidoPercibir);
+
+
+
+
+
+		PdfPTable table2 = new PdfPTable(5);
+
+		table2.getDefaultCell().setBorder(0);
+
+
+
+		table2.addCell("Cálculo empresario:BASE");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell(""+empresario[0]);
+
+
+
+
+
+		table2.addCell("Contingencias comunes 23,60%");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell(""+empresario[1]);
+
+
+
+		table2.addCell("Desempleo 6.7%");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell(""+empresario[2]);
+
+
+
+		table2.addCell("Formacion 0.6%");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell(""+empresario[3]);
+
+
+
+		table2.addCell("Accidentes de trabajo 1.0%");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell(""+empresario[4]);
+
+
+
+		table2.addCell("FOGASA 0.2%");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell(""+empresario[5]);
+
+
+
+		table2.addCell("TOTAL empresario");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell(""+empresario[6]);
+
+
+
+		table2.addCell("Coste total trabajador");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell("");
+
+		table2.addCell(""+empresario[7]);
+
+		document.add(table);
+
+		document.add(table2);
+
+
+
+		document.close();
+
+		writer.close();
+
+		System.out.println("PDF CREADO");
+
+
+
+	}
+
+	catch (Exception e) {
+
+		// TODO: handle exception
+
+	}
 
 
 
