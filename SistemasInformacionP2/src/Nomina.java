@@ -241,10 +241,12 @@ public class Nomina{
 	private Float[] getDescuentos(String[] fila, ArrayList<Map> hoja2, Float[] brutoAnual, boolean  prorateo, Float[] complementoYAntiguedad, Float[] salarioMensual, Date fecha) {
 
 		Float sSocial = 0.0f; Float formacion = 0.0f; Float desempleo = 0.0f; Float irpf = 0.0f;
-
-		sSocial = (brutoAnual[0] * (Float)hoja2.get(5).get("Cuota obrera general TRABAJADOR") / (12*100));
-		formacion = (brutoAnual[0] * (Float)hoja2.get(5).get("Cuota formación TRABAJADOR") / (12*100));
-		desempleo = (brutoAnual[0] * (Float)hoja2.get(5).get("Cuota desempleo TRABAJADOR") / (12*100));
+		Float x = (Float)hoja2.get(5).get("Cuota obrera general TRABAJADOR") / (12*100);
+		sSocial = (brutoAnual[0] * x);
+		Float y = (Float)hoja2.get(5).get("Cuota formación TRABAJADOR") / (12*100);
+		formacion = (brutoAnual[0] * y);
+		Float z = (Float)hoja2.get(5).get("Cuota desempleo TRABAJADOR") / (12*100);
+		desempleo = (brutoAnual[0] * z);
 
 		Set set = hoja2.get(4).keySet();
 		Iterator iterador = set.iterator();
@@ -275,7 +277,7 @@ public class Nomina{
 		irpfPer = (Float) hoja2.get(4).get(temp);
 		irpf =  (totaldevengos / irpfPer);
 
-		Float[] resultado = {sSocial, formacion, desempleo, irpf};
+		Float[] resultado = {sSocial, formacion, desempleo, irpf, x, y, z, irpfPer};
 
 
 		return resultado;
@@ -653,6 +655,7 @@ public class Nomina{
 
 	private Date convertirFecha(String f) {
 		int year, month = 0, day;
+		
 		day = Integer.parseInt(f.substring(0, 2));
 		String m = f.substring(3,6);
 		switch(m) {
@@ -696,7 +699,11 @@ public class Nomina{
 		}
 
 		year = Integer.parseInt(f.substring(7));
-		return new Date(year, month, day);
+		System.out.println("anio " + year);
+		Date resul = new Date(year - 1900, month, day);
+		System.out.println("totali " + resul);
+		return resul;
+		
 	}
 
 	public boolean fechaValida(String fechaI, String fechaF){
