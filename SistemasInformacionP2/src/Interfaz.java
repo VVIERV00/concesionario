@@ -76,12 +76,12 @@ public class Interfaz {
 		JTextFieldCargo.setBounds(303, 290, 536, 30);
 		frame.getContentPane().add(JTextFieldCargo);
 
-		JSpinner mes = new JSpinner(new SpinnerNumberModel(00, 0, 12, 1));
+		JSpinner mes = new JSpinner(new SpinnerNumberModel(01, 01, 12, 1));
 		mes.setFont(new Font("Courier New", Font.BOLD | Font.ITALIC, 13));
 		mes.setBounds(420, 166, 139, 36);
 		frame.getContentPane().add(mes);
 
-		JSpinner ano = new JSpinner(new SpinnerNumberModel(1970, 1970, 2099, 1));
+		JSpinner ano = new JSpinner(new SpinnerNumberModel(1980, 1980, 2050, 1));
 		ano.setFont(new Font("Courier New", Font.BOLD | Font.ITALIC, 13));
 		ano.setBounds(598, 166, 139, 36);
 		frame.getContentPane().add(ano);
@@ -148,8 +148,8 @@ public class Interfaz {
 		btnGenerar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				@SuppressWarnings("deprecation")
-				Date fecha = new Date((int)ano.getValue(), (int)mes.getValue()-1, 1);
-				Main m = new Main(JTextFieldCargo.getText(), JTextFieldDonde.getText(), fecha);
+				Date fecha = new Date((int)ano.getValue()-1900, (int)mes.getValue()-1, 1);
+				Manejador m = new Manejador(JTextFieldCargo.getText(), JTextFieldDonde.getText(), fecha);
 				m.calcular();
 				
 			}

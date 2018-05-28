@@ -35,8 +35,8 @@ public class Main {
 			datos = cCC.corregir(datos);
 			conector.writeXLSXFile(guardar,datos);
 			
-			Nomina nom = new Nomina(datos, cargar, fecha);
-			nom.generar();
+			//Nomina nom = new Nomina(datos[], cargar, fecha);
+			//nom.generar();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

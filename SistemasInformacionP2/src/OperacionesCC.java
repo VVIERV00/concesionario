@@ -118,7 +118,7 @@ public class OperacionesCC {
 
 	public static String verificarCCC(String cccOriginal) {
 		if(cccOriginal!="" && cccOriginal!=null&&cccOriginal.length()>=20) {
-			System.out.println(cccOriginal);
+			//System.out.println(cccOriginal);
 			StringBuilder ccc = new StringBuilder(cccOriginal);
 
 			StringBuilder entidadOficina = new StringBuilder("00" + ccc.substring(0, 8));
@@ -185,7 +185,7 @@ public class OperacionesCC {
 				email=email+contador;
 			}
 
-			//Añadimos extension
+			//Aï¿½adimos extension
 
 			email=email+"@nombreempresa.es";
 
