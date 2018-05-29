@@ -9,14 +9,25 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+
+import model.ModelCategoria;
+import model.ModelEmpresa;
+import model.ModelNomina;
+import model.ModelTrabajador;
+import tablas.Categorias;
+import tablas.Empresas;
+import tablas.Trabajadorbbdd;
+import utils.SesionHibernate;
 
 
 public class Nomina{
@@ -151,7 +162,7 @@ public class Nomina{
 		}
 		Float[] complementoYAntiguedad = getComplementos(fila, fecha, hoja2); //[0]:Complemento [1]:Antiguedad
 		Integer xx = (Integer) hoja2.get(0).get(fila[5]);
-		Float[] salarioMensual = {Float.valueOf(Integer.toString(xx))};
+		Float[]salarioMensual  = {Float.valueOf(Integer.toString(xx))};
 
 		salarioMensual[0] /= 14;
 		Float[] salarioBruto = getBrutoAnual(salarioMensual[0], prorateo, fila, complementoYAntiguedad);//[0]:anual [1]:mensual
@@ -173,6 +184,31 @@ public class Nomina{
 		}else {
 			crearPDF(fecha, rutaDatosNomina+"/PDF/"+fila[3]+fila[2]+".pdf", complementoYAntiguedad, descuentos, salarioMensual, salarioBruto, fila, hoja2, pagosEmpresario);
 		}
+		System.out.println("Empieza la sesion hibernate");
+
+		Session sesion = SesionHibernate.getSesion().openSession();
+		Transaction tx = sesion.beginTransaction();
+		
+		Categorias ultimaC = ModelCategoria.crear(sesion, fila[5], xx.doubleValue(), complementoYAntiguedad[0].doubleValue());
+		tx.commit();
+		Empresas ultimaE = ModelEmpresa.crear(sesion, fila[6], fila[7]);
+		tx.commit();
+		Trabajadorbbdd ultimaT =  ModelTrabajador.crear(sesion, ultimaC, ultimaE, 
+				fila[3], fila[1], fila[2], fila[0], 
+				fila[4], fila[9], fila[14], fila[16], ); //TODO set nominas
+		tx.commit();
+		/*ModelNomina.crear(sesion, ultimaT, fecha.getMonth()+1, fecha.getYear(), 
+				numeroTrienios, importeTrienios, importeSalarioMes, importeComplementoMes, 
+				valorProrrateo, brutoAnual, irpf, importeIrpf, baseEmpresario, 
+				seguridadSocialEmpresario, importeSeguridadSocialEmpresario, desempleoEmpresario, 
+				importeDesempleoEmpresario, formacionEmpresario, importeFormacionEmpresario, 
+				accidentesTrabajoEmpresario, importeAccidentesTrabajoEmpresario, fogasaempresario, 
+				importeFogasaempresario, seguridadSocialTrabajador, importeSeguridadSocialTrabajador, 
+				desempleoTrabajador, importeDesempleoTrabajador, formacionTrabajador, 
+				importeFormacionTrabajador, brutoNomina, liquidoNomina, costeTotalEmpresario);*/
+		tx.commit();
+		sesion.close();
+		System.out.println("Acaba la sesion hibernate");
 		
 
 	}//brutoAnual 
