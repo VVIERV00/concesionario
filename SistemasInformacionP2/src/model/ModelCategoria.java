@@ -3,6 +3,7 @@ package model;
 import java.util.List;
 
 import org.hibernate.Filter;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import tablas.Categorias;
@@ -12,13 +13,18 @@ public class ModelCategoria {
 		//Filter filter = sesion.enableFilter("filtroCategorias");
 		//filter.setParameter("nombre", nombre);
 		//Categorias filtro = sesion.get(Categorias.class, "s");
-		List<Categorias> lista = sesion.createQuery("from categorias where NombreCategoria = " + nombre).list();
+		List<Categorias> lista = sesion.createQuery("from Categorias where NombreCategoria = '" + nombre+"'").list();
 		Categorias categoria = new Categorias(nombre, salarioBase, complemento);
 
 		if (lista.size() == 0) {
 			sesion.save(categoria);
 		}else {
-			sesion.update(categoria);
+			Query query = sesion.createQuery("update Categorias set SalarioBaseCategoria = '" + categoria.getSalarioBaseCategoria() +
+    				"' where NombreCategoria = '"+ categoria.getNombreCategoria()+ "'");
+			int result = query.executeUpdate();
+			Query query2 = sesion.createQuery("update Categorias set ComplementoCategoria = '" +  categoria.getComplementoCategoria()+
+    				"' where NombreCategoria = '"+ categoria.getNombreCategoria()+ "'");
+			int result2 = query2.executeUpdate();
 		}
 		//sesion.disableFilter("filtroCategorias");
 		

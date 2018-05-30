@@ -8,5 +8,9 @@
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/nominas</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    	<mapping resource="tablas/Categorias.hbm.xml"/>
+    	<mapping resource="tablas/Empresas.hbm.xml"/>
+    	<mapping resource="tablas/Nomina.hbm.xml"/>
+    	<mapping resource="tablas/Trabajadorbbdd.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
