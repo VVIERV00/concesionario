@@ -184,31 +184,7 @@ public class Nomina{
 		}else {
 			crearPDF(fecha, rutaDatosNomina+"/PDF/"+fila[3]+fila[2]+".pdf", complementoYAntiguedad, descuentos, salarioMensual, salarioBruto, fila, hoja2, pagosEmpresario);
 		}
-		System.out.println("Empieza la sesion hibernate");
-
-		Session sesion = SesionHibernate.getSesion().openSession();
-		Transaction tx = sesion.beginTransaction();
 		
-		Categorias ultimaC = ModelCategoria.crear(sesion, fila[5], xx.doubleValue(), complementoYAntiguedad[0].doubleValue());
-		tx.commit();
-		Empresas ultimaE = ModelEmpresa.crear(sesion, fila[6], fila[7]);
-		tx.commit();
-		Trabajadorbbdd ultimaT =  ModelTrabajador.crear(sesion, ultimaC, ultimaE, 
-				fila[3], fila[1], fila[2], fila[0], 
-				fila[4], fila[9], fila[14], fila[16], null ); //TODO set nominas
-		tx.commit();
-		/*ModelNomina.crear(sesion, ultimaT, fecha.getMonth()+1, fecha.getYear(), 
-				numeroTrienios, importeTrienios, importeSalarioMes, importeComplementoMes, 
-				valorProrrateo, brutoAnual, irpf, importeIrpf, baseEmpresario, 
-				seguridadSocialEmpresario, importeSeguridadSocialEmpresario, desempleoEmpresario, 
-				importeDesempleoEmpresario, formacionEmpresario, importeFormacionEmpresario, 
-				accidentesTrabajoEmpresario, importeAccidentesTrabajoEmpresario, fogasaempresario, 
-				importeFogasaempresario, seguridadSocialTrabajador, importeSeguridadSocialTrabajador, 
-				desempleoTrabajador, importeDesempleoTrabajador, formacionTrabajador, 
-				importeFormacionTrabajador, brutoNomina, liquidoNomina, costeTotalEmpresario);*/
-		tx.commit();
-		sesion.close();
-		System.out.println("Acaba la sesion hibernate");
 		
 
 	}//brutoAnual 
@@ -445,8 +421,10 @@ public class Nomina{
 			table.addCell("30 ");
 			table.addCell(""+df.format(salarioMensual[0]/30));
 			table.addCell(""+df.format(salarioMensual[0]));
+			double importeSalarioMes = salarioMensual[0];
 			table.addCell("");
 			table.addCell("Prorrata");
+			double valorProrrateo = (double)salarioAnual[1];
 			table.addCell("30");
 			table.addCell(""+df.format(salarioAnual[1]/30));
 			table.addCell(""+df.format(salarioAnual[1]));
@@ -454,15 +432,19 @@ public class Nomina{
 			table.addCell("Complemento");
 			table.addCell("30");
 			table.addCell(""+df.format(salarioAnual[2]/30));
+			double importeComplementoMes = salarioAnual[2];
 			table.addCell(""+df.format(salarioAnual[2]));
 			table.addCell("");
-
+			int numeroTrienios = 0;
+			int importeTrienios = 0;
 			if(complementoYAntiguedad.length!=6) {
 
 				table.addCell("Antigüedad");
 				table.addCell(""+df.format(complementoYAntiguedad[2]));
+				numeroTrienios = Math.round(complementoYAntiguedad[2]);
 				table.addCell(""+df.format((complementoYAntiguedad[1]/14)/30));
 				table.addCell(""+df.format(complementoYAntiguedad[1]/14));
+				importeTrienios = Math.round(complementoYAntiguedad[1]/14);
 				table.addCell("");
 
 			}else {
@@ -470,14 +452,18 @@ public class Nomina{
 				if(complementoYAntiguedad[1]>mes) { //si el mes es mayor que el mes en que se hace la nomina
 					table.addCell("Antigüedad");
 					table.addCell(""+df.format(complementoYAntiguedad[5])); //Esto lo pasa alvaro
+					numeroTrienios = Math.round(complementoYAntiguedad[5]);
 					table.addCell(""+df.format(complementoYAntiguedad[3]/30));
 					table.addCell(""+df.format(complementoYAntiguedad[3]));
+					importeTrienios = Math.round(complementoYAntiguedad[3]);
 					table.addCell("");
 				}else if(complementoYAntiguedad[1]<=mes) {
 					table.addCell("Antigüedad");
 					table.addCell(""+df.format(complementoYAntiguedad[5])); //Esto lo pasa alvaro
+					numeroTrienios = Math.round(complementoYAntiguedad[5]);
 					table.addCell(""+df.format(complementoYAntiguedad[2]/30));
 					table.addCell(""+df.format(complementoYAntiguedad[2]));
+					importeTrienios = Math.round(complementoYAntiguedad[2]);
 					table.addCell("");
 				}
 			}
@@ -499,43 +485,45 @@ public class Nomina{
 			table.addCell(" ");
 
 			table.addCell("Contingencias Generales");
+			double seguridadSocialTrabajador = 4.7;
 			table.addCell("4.7%");
 			table.addCell("de "+df.format(totaldevengos));
 			table.addCell("");
+			double importeSeguridadSocialTrabajador = descuentos[0];
 			table.addCell(""+df.format(descuentos[0]));
 
 			table.addCell("Desempleo");
-
+			double desempleoTrabajador = 1.6;
 			table.addCell("1.6%");
 
 			table.addCell("de "+df.format(totaldevengos));
 
 			table.addCell("");
-
+			double importeDesempleoTrabajador = descuentos[2];
 			table.addCell(""+df.format(descuentos[2]));
 
 
 
 			table.addCell("Cuota formación");
-
+			double formacionTrabajador = 0.1;
 			table.addCell("0.1%	");
 
 			table.addCell("de "+df.format(totaldevengos));
 
 			table.addCell("");
-
+			double importeFormacionTrabajador = descuentos[1];
 			table.addCell(""+df.format(descuentos[1]));
 
 
 
 			table.addCell("IRPF");
-
+			double irpf = irpfPer;
 			table.addCell(irpfPer.toString()+"%");
 
 			table.addCell("de "+df.format(totaldevengos));
 
 			table.addCell("");
-
+			double importeIrpf = descuentos[3];
 			table.addCell(""+df.format(descuentos[3]));
 			table.addCell(" ");
 
@@ -574,7 +562,7 @@ public class Nomina{
 
 			table.addCell("");
 			table.addCell("");
-
+			double brutoNomina = totaldevengos;
 			table.addCell(df.format(totaldevengos));
 
 			table.addCell(" ");
@@ -606,7 +594,7 @@ public class Nomina{
 			table.addCell("");
 
 			table.addCell("Líquido a percibir 	");
-
+			double liquidoNomina = liquidoPercibir;
 			table.addCell(df.format(liquidoPercibir));
 
 			table.addCell(" ");
@@ -645,9 +633,9 @@ public class Nomina{
 			table2.addCell("");
 
 			table2.addCell("");
-
+			double baseEmpresario = empresario[0];
 			table2.addCell(""+df.format(empresario[0]));
-
+			double seguridadSocialEmpresario = 23.60;
 			table2.addCell("Contingencias comunes 23,60% ");
 
 			table2.addCell("");
@@ -655,9 +643,9 @@ public class Nomina{
 			table2.addCell("");
 
 			table2.addCell("");
-
+			double importeSeguridadSocialEmpresario = empresario[1];
 			table2.addCell(""+df.format(empresario[1]));
-
+			double desempleoEmpresario = 6.7;
 			table2.addCell("Desempleo 6.7%");
 
 			table2.addCell("");
@@ -665,26 +653,31 @@ public class Nomina{
 			table2.addCell("");
 
 			table2.addCell("");
-
+			double importeDesempleoEmpresario = empresario[2];
 			table2.addCell(""+df.format(empresario[2]));
 
 			table2.addCell("Formacion 0.6%");
+			double formacionEmpresario = 0.6;
 			table2.addCell("");
 			table2.addCell("");
 			table2.addCell("");
+			double importeFormacionEmpresario = empresario[3];
 			table2.addCell(""+df.format(empresario[3]));
 
 			table2.addCell("Accidentes de trabajo 1.0%");
+			double accidentesTrabajoEmpresario = 1.0;
 			table2.addCell("");
 			table2.addCell("");
 			table2.addCell("");
+			double importeAccidentesTrabajoEmpresario = empresario[4];
 			table2.addCell(""+df.format(empresario[4]));
 
 			table2.addCell("FOGASA 0.2%");
-
+			double fogasaEmpresario = 0.2;
 			table2.addCell("");
 			table2.addCell("");
 			table2.addCell("");
+			double importeFogasaEmpresario = empresario[5];
 			table2.addCell(""+df.format(empresario[5]));
 
 			table2.addCell("TOTAL empresario");
@@ -694,7 +687,7 @@ public class Nomina{
 			table2.addCell("");
 
 			table2.addCell("");
-
+			double costeTotalEmpresario = empresario[6];
 			table2.addCell(""+df.format(empresario[6]));
 
 			table2.addCell("Coste total trabajador");
@@ -713,6 +706,32 @@ public class Nomina{
 			document.close();
 			writer.close();
 			//System.out.println("PDF CREADO");
+			double brutoAnual = salarioAnual[0];
+			System.out.println("Empieza la sesion hibernate");
+
+			Session sesion = SesionHibernate.getSesion().openSession();
+			Transaction tx = sesion.beginTransaction();
+			
+			Categorias ultimaC = ModelCategoria.crear(sesion, fila[5], Double.valueOf((Integer) hoja2.get(1).get(fila[5])), complementoYAntiguedad[0].doubleValue());
+			tx.commit();
+			Empresas ultimaE = ModelEmpresa.crear(sesion, fila[6], fila[7]);
+			tx.commit();
+			Trabajadorbbdd ultimaT =  ModelTrabajador.crear(sesion, ultimaC, ultimaE, 
+					fila[3], fila[1], fila[2], fila[0], 
+					fila[4], fila[9], fila[14], fila[16], null ); //TODO set nominas
+			tx.commit();
+			ModelNomina.crear(sesion, ultimaT, fecha.getMonth()+1, fecha.getYear(), 
+					numeroTrienios, importeTrienios, importeSalarioMes, importeComplementoMes, 
+					valorProrrateo, brutoAnual, irpf, importeIrpf, baseEmpresario, 
+					seguridadSocialEmpresario, importeSeguridadSocialEmpresario, desempleoEmpresario, 
+					importeDesempleoEmpresario, formacionEmpresario, importeFormacionEmpresario, 
+					accidentesTrabajoEmpresario, importeAccidentesTrabajoEmpresario, fogasaEmpresario, 
+					importeFogasaEmpresario, seguridadSocialTrabajador, importeSeguridadSocialTrabajador, 
+					desempleoTrabajador, importeDesempleoTrabajador, formacionTrabajador, 
+					importeFormacionTrabajador, brutoNomina, liquidoNomina, costeTotalEmpresario);
+			tx.commit();
+			sesion.close();
+			System.out.println("Acaba la sesion hibernate");
 		}
 
 		catch (Exception e) {
