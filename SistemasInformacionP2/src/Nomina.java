@@ -195,7 +195,7 @@ public class Nomina{
 		tx.commit();
 		Trabajadorbbdd ultimaT =  ModelTrabajador.crear(sesion, ultimaC, ultimaE, 
 				fila[3], fila[1], fila[2], fila[0], 
-				fila[4], fila[9], fila[14], fila[16], ); //TODO set nominas
+				fila[4], fila[9], fila[14], fila[16], null ); //TODO set nominas
 		tx.commit();
 		/*ModelNomina.crear(sesion, ultimaT, fecha.getMonth()+1, fecha.getYear(), 
 				numeroTrienios, importeTrienios, importeSalarioMes, importeComplementoMes, 

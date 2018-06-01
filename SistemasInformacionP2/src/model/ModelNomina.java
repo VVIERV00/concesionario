@@ -2,6 +2,7 @@ package model;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import tablas.Categorias;
@@ -26,8 +27,119 @@ public class ModelNomina {
 		if (lista.size() == 0) {
 			sesion.save(nomina);
 		}else {
-			sesion.update(nomina); //no se si hace update al que debe, mas le vale.
+			Query query = sesion.createQuery("update Nomina set importeSalarioMes = '" + nomina.getImporteSalarioMes() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			int result = query.executeUpdate();
+			
+			
+			query = sesion.createQuery("update Nomina set valorProrrateo = '" + nomina.getValorProrrateo() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			
+			query = sesion.createQuery("update Nomina set irpf = '" + nomina.getIrpf() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			
+			query = sesion.createQuery("update Nomina set importeIrpf = '" + nomina.getImporteIrpf() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			
+			query = sesion.createQuery("update Nomina set baseEmpresario = '" + nomina.getBaseEmpresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			
+			query = sesion.createQuery("update Nomina set seguridadSocialEmpresario = '" + nomina.getSeguridadSocialEmpresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set importeSeguridadSocialEmpresario = '" + nomina.getImporteSeguridadSocialEmpresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set desempleoEmpresario = '" + nomina.getDesempleoEmpresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set importeDesempleoEmpresario = '" + nomina.getImporteDesempleoEmpresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set formacionEmpresario = '" + nomina.getFormacionEmpresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set importeFormacionEmpresario = '" + nomina.getImporteFormacionEmpresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set accidentesTrabajoEmpresario = '" + nomina.getAccidentesTrabajoEmpresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set importeAccidentesTrabajoEmpresario = '" + nomina.getImporteAccidentesTrabajoEmpresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set fogasaempresario = '" + nomina.getFogasaempresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set importeFogasaempresario = '" + nomina.getImporteFogasaempresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set seguridadSocialTrabajador = '" + nomina.getImporteSeguridadSocialTrabajador() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set importeSeguridadSocialTrabajador = '" + nomina.getImporteSeguridadSocialTrabajador() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set formacionTrabajador = '" + nomina.getFormacionTrabajador() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set importeFormacionTrabajador = '" + nomina.getImporteFormacionTrabajador() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			query = sesion.createQuery("update Nomina set costeTotalEmpresario = '" + nomina.getCosteTotalEmpresario() +
+    				"' where Mes = '"+ nomina.getMes()+ "' and Anio = '"+nomina.getAnio()+ "'and IdTrabajador= '"+nomina.getTrabajadorbbdd().getIdTrabajador()+
+    				"'and BrutoNomina='"+nomina.getBrutoNomina()+"' and LiquidoNomina='"+nomina.getLiquidoNomina());
+			result = query.executeUpdate();
+			
+			
+			
+			
+			
+			
+			
+			
+			
 		}
-		sesion.save(nomina);
 	}
 }
