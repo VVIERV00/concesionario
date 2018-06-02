@@ -716,9 +716,9 @@ public class Nomina{
 			tx.commit();
 			Empresas ultimaE = ModelEmpresa.crear(sesion, fila[6], fila[7]);
 			tx.commit();
-			Trabajadorbbdd ultimaT =  ModelTrabajador.crear(sesion, ultimaC, ultimaE, 
+			Trabajadorbbdd ultimaT =  ModelTrabajador.crear(sesion, ultimaC.getIdCategoria(), ultimaE.getIdEmpresa(), 
 					fila[3], fila[1], fila[2], fila[0], 
-					fila[4], fila[9], fila[14], fila[16], null ); //TODO set nominas
+					fila[4], convertirFecha(fila[9]), fila[14], fila[16]);//, null//TODO set nominas
 			tx.commit();
 			ModelNomina.crear(sesion, ultimaT, fecha.getMonth()+1, fecha.getYear(), 
 					numeroTrienios, importeTrienios, importeSalarioMes, importeComplementoMes, 

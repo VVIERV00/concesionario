@@ -14,7 +14,8 @@ import tablas.Trabajadorbbdd;
 public class ModelTrabajador {
 	public static Trabajadorbbdd crear(Session sesion, Integer categorias, 
 			Integer empresas, String nombre, String apellido1, String apellido2, String nifnie, 
-			String email, Date fechaAlta, String codigoCuenta, String iban, Set nominas) {
+			String email, Date fechaAlta, String codigoCuenta, String iban) {
+		@SuppressWarnings("unchecked")
 		List<Trabajadorbbdd> lista = sesion.createQuery("from Trabajadorbbdd where Nombre = '" + 
 			nombre + "' and NIFNIE = '" + nifnie + "' and FechaAlta = '"+ fechaAlta+"'").list();
 		Categorias objCat = sesion.load(Categorias.class, categorias);

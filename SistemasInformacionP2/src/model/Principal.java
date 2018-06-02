@@ -27,8 +27,7 @@ public class Principal {
 
 		
 		ModelTrabajador.crear(sesion, lista.get(0).getIdCategoria(), lista2.get(0).getIdEmpresa(), "fernando", "asuncion", 
-				"71404629W", "71404629W","sd", new Date("20/10/2015"), "ese", 
-				"aquel", new HashSet<T>());
+				"71404629W", "71404629W","sd", new Date("20/10/2015"), "ese","aquel");
 		System.out.println("acaba");
 		
 		

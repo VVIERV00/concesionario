@@ -49,7 +49,7 @@ public class Trabajadorbbdd implements java.io.Serializable {
 	}
 
 	public Trabajadorbbdd(Categorias categorias, Empresas empresas, String nombre, String apellido1, String apellido2,
-			String nifnie, String email, Date fechaAlta, String codigoCuenta, String iban, Set nominas) {
+			String nifnie, String email, Date fechaAlta, String codigoCuenta, String iban) {
 		this.categorias = categorias;
 		this.empresas = empresas;
 		this.nombre = nombre;
@@ -60,7 +60,7 @@ public class Trabajadorbbdd implements java.io.Serializable {
 		this.fechaAlta = fechaAlta;
 		this.codigoCuenta = codigoCuenta;
 		this.iban = iban;
-		this.nominas = nominas;
+		//this.nominas = nominas;
 	}
 
 	@Id
