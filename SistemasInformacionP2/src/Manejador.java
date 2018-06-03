@@ -35,7 +35,7 @@ public class Manejador {
 			datos = cCC.corregir(datos);
 			conector.writeXLSXFile(guardar,datos);
 			
-			Nomina nom = new Nomina(guardar, cargar, fecha);
+			NominaG nom = new NominaG(guardar, cargar, fecha);
 			nom.generar();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

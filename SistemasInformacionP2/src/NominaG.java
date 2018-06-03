@@ -30,7 +30,7 @@ import tablas.Trabajadorbbdd;
 import utils.SesionHibernate;
 
 
-public class Nomina{
+public class NominaG{
 	//private Session sesion = null;
 	//private Transaction tx = null;
 	private  String rutaDatosNomina;
@@ -45,12 +45,12 @@ public class Nomina{
 		} catch (IOException e) {
 			System.out.println("problema: " + e);
 		}
-		Nomina objeto = new Nomina(foo[0][0],"SistemasInformacionII.xlsx", new Date(2012,04,01));
+		NominaG objeto = new NominaG(foo[0][0],"SistemasInformacionII.xlsx", new Date(2012,04,01));
 		objeto.generar();
 
 	}
 
-	public Nomina(String rutaDatosNominas,String rutaDatos, Date fecha) {
+	public NominaG(String rutaDatosNominas,String rutaDatos, Date fecha) {
 		this.rutaDatosNomina = rutaDatosNominas;
 		this.rutaDatos = rutaDatos;
 		this.fecha = fecha;
@@ -143,6 +143,7 @@ public class Nomina{
 					}
 					
 				}
+				System.out.println("doy vueltas "+cont);
 			}
 			
 			//sesion.close();
@@ -318,28 +319,13 @@ public class Nomina{
 				break;
 			}else if ((t - brutoAnual[0]) < 1000 && (t - brutoAnual[0]) >= 0 ) {
 				buscado = t;
-				//if(fila[3].contains("Clementina")) {
-					//System.out.println("BBB " + buscado);
-				//}
 				break;
 			}
-			
-			
-
-			//if(fila[3].contains("Clementina")) {
-				//System.out.println("AAA " + t);
-			//}
 
 		}
-		//System.out.println("buscado " + buscado);
 		System.out.println("EL buscado "+buscado);
 		irpfPer = (Float) hoja2.get(4).get(buscado);
 		System.out.println("a ver este "+irpfPer);
-		/*if(fila[3].contains("Clementina")) {
-			//System.out.println(set);
-			System.out.println("b " + buscado);
-			System.out.println("s " + irpfPer);
-		}*/
 
 		//System.out.println("quehaa " + temp);
 		int mes = fecha.getMonth()+1;
@@ -354,14 +340,7 @@ public class Nomina{
 			totaldevengos=salarioMensual[0]+brutoAnual[1]+brutoAnual[2]+complementoYAntiguedad[2];
 		}
 		
-		//if(fila[3].contains("Clementina")) {
-		/*	System.out.println("******brutoA " + brutoAnual[0] );
-
-			System.out.println("******irpPer " + (Float) hoja2.get(4).get(buscado));
-			System.out.println("******totalDevengos " + totaldevengos);//}*/
-		System.out.println("total dev "+totaldevengos);
 		irpf =  (totaldevengos * irpfPer)/100;
-		System.out.println("a ver este 2 "+irpf);
 
 		Float[] resultado = {sSocial, formacion, desempleo, irpf, x, y, z, irpfPer};
 		return resultado;
@@ -728,7 +707,7 @@ public class Nomina{
 			Empresas ultimaE = ModelEmpresa.crear(sesion, fila[6], fila[7]);
 			Trabajadorbbdd ultimaT =  ModelTrabajador.crear(sesion, ultimaC, ultimaE, 
 					fila[3], fila[1], fila[2], fila[0], 
-					fila[4], convertirFecha(fila[9]), fila[14], fila[16]);//, null//TODO set nominas
+					fila[4], convertirFecha(fila[8]), fila[14], fila[16]);//, null//TODO set nominas
 			System.out.println(fecha);
 			ModelNomina.crear(sesion, ultimaT, fecha.getMonth()+1, fecha.getYear(), 
 					numeroTrienios, importeTrienios, importeSalarioMes, importeComplementoMes, 

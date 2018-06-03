@@ -6,6 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import tablas.Categorias;
+import tablas.Empresas;
 import tablas.Nomina;
 import tablas.Trabajadorbbdd;
 
@@ -19,12 +20,14 @@ public class ModelNomina {
 			double seguridadSocialTrabajador, double importeSeguridadSocialTrabajador, double desempleoTrabajador,
 			double importeDesempleoTrabajador, double formacionTrabajador, double importeFormacionTrabajador,
 			double brutoNomina, double liquidoNomina, double costeTotalEmpresario) {
-		
+		System.out.println(anio);
+		System.out.println("info del trabajador");
 		Nomina nomina = new Nomina(trabajadorbbdd, mes, anio, numeroTrienios, importeTrienios, importeSalarioMes, importeComplementoMes, valorProrrateo, brutoAnual, irpf, importeIrpf, baseEmpresario, seguridadSocialEmpresario, importeSeguridadSocialEmpresario, desempleoEmpresario, importeDesempleoEmpresario, formacionEmpresario, importeFormacionEmpresario, accidentesTrabajoEmpresario, importeAccidentesTrabajoEmpresario, fogasaempresario, importeFogasaempresario, seguridadSocialTrabajador, importeSeguridadSocialTrabajador, desempleoTrabajador, importeDesempleoTrabajador, formacionTrabajador, importeFormacionTrabajador, brutoNomina, liquidoNomina, costeTotalEmpresario);
 		@SuppressWarnings("unchecked")
 		List<Nomina> lista = sesion.createQuery("from Nomina where Mes = '" + nomina.getMes() + 
 				"' and Anio = '" + nomina.getAnio()+ "' and IdTrabajador = '" + trabajadorbbdd.getIdTrabajador() + "' and BrutoNomina = '" + 
 				nomina.getBrutoNomina() + "' and LiquidoNomina = '" + nomina.getLiquidoNomina()+ "'").list();
+		System.out.println("tamaño de la lista "+ lista.size());
 		if (lista.size() == 0) {
 			sesion.save(nomina);
 		}else {
@@ -139,6 +142,10 @@ public class ModelNomina {
 				" and Anio = " + anio + " and IdTrabajador = " + trabajadorbbdd.getIdTrabajador() + "and nom.BrutoNomina = " + 
 				brutoNomina + "and LiquidoNomina = " + liquidoNomina).list();
 		return listaFinal.get(0);*/
-		return nomina;
+		List<Nomina> lista2 = sesion.createQuery("from Nomina where Mes = '" + nomina.getMes() + 
+				"' and Anio = '" + nomina.getAnio()+ "' and IdTrabajador = '" + trabajadorbbdd.getIdTrabajador() + "' and BrutoNomina = '" + 
+				nomina.getBrutoNomina() + "' and LiquidoNomina = '" + nomina.getLiquidoNomina()+ "'").list();
+		Nomina s = sesion.load(Nomina.class, lista2.get(0).getIdNomina());
+		return s;
 	}
 }

@@ -27,7 +27,8 @@ public class ModelCategoria {
 			int result2 = query2.executeUpdate();
 		}
 		//sesion.disableFilter("filtroCategorias");
-		
+		List<Categorias> lista2 = sesion.createQuery("from Categorias where NombreCategoria = '" + categoria.getNombreCategoria()+"'").list();
+		Categorias c = sesion.load(Categorias.class, lista2.get(0).getId());
 		return categoria;
 	}
 }

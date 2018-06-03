@@ -15,6 +15,7 @@ public class ModelTrabajador {
 			Empresas empresas, String nombre, String apellido1, String apellido2, String nifnie, 
 			String email, Date fechaAlta, String codigoCuenta, String iban) {
 		//System.out.println("CHUNGO "+ categorias);
+		System.out.println("fecha de alta "+fechaAlta);
 		List<Categorias> lista2 = sesion.createQuery("from Categorias where NombreCategoria = '" + categorias.getNombreCategoria()+"'").list();
 		List<Empresas> lista3 = sesion.createQuery("from Empresas where CIF = '" + empresas.getCif()+"'").list();
 		
@@ -25,14 +26,10 @@ public class ModelTrabajador {
 		
 		List<Trabajadorbbdd> lista = sesion.createQuery("from Trabajadorbbdd where Nombre = '" + 
 			trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'").list();
-		/*Trabajadorbbdd trabajador = new Trabajadorbbdd(categorias, empresas, 
-				nombre, apellido1, apellido2, nifnie, email, fechaAlta, codigoCuenta, 
-				iban, nominas);*/
+		System.out.println("tamaño lista trabajador "+lista.size());
 		if (lista.size() == 0) {
-		
-			System.out.println("empieza asunto");
+			System.out.println("esta guardado");
 			sesion.save(trabajador);
-			System.out.println("acaba asunto");
 		}else {
 		System.out.println("else");
 			Query query = sesion.createQuery("update Trabajadorbbdd set Apellido1 = '" +trabajador.getApellido1()+
@@ -58,11 +55,16 @@ public class ModelTrabajador {
     				"' where  Nombre = '" + trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
 			int result7 = query7.executeUpdate();
 			
+			
+			
 		}
 		/*List<Trabajadorbbdd> listaFinal = sesion.createQuery("from Trabajadorbbdd where Nombre = '" + 
 			trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'").list();
 		return listaFinal.get(0);*/
-		return trabajador;
+		List<Trabajadorbbdd> lista4 = sesion.createQuery("from Trabajadorbbdd where Nombre = '" + 
+				trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'").list();
+		Trabajadorbbdd s = sesion.load(Trabajadorbbdd.class, lista4.get(0).getIdTrabajador());
+		return s;
 	}
 }
 

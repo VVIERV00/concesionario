@@ -21,9 +21,9 @@ public class ModelEmpresa {
 			int result = query.executeUpdate();
 			//sesion.saveOrUpdate(empresa);
 		}
-		/*List<Empresas> listaFinal = sesion.createQuery("from Empresas where CIF = '" + CIF+"'").list();
+		List<Empresas> listaFinal = sesion.createQuery("from Empresas where CIF = '" + CIF+"'").list();
 
-		return listaFinal.get(0);*/
+		Empresas e = sesion.load(Empresas.class, listaFinal.get(0).getId());
 		return empresa;
 	}
 }
