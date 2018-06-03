@@ -36,26 +36,26 @@ public class ModelTrabajador {
 		}else {
 		System.out.println("else");
 			Query query = sesion.createQuery("update Trabajadorbbdd set Apellido1 = '" +trabajador.getApellido1()+
-    				"' where  Nombre = '" + trabajador.getNombre() + "' and trab.NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
+    				"' where  Nombre = '" + trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
 			int result = query.executeUpdate();
 			Query query2 = sesion.createQuery("update Trabajadorbbdd set Apellido2 = '" +trabajador.getApellido2()+
-    				"' where  Nombre = '" + trabajador.getNombre() + "' and trab.NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
+    				"' where  Nombre = '" + trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
 			int result2 = query2.executeUpdate();
 			Query query3 = sesion.createQuery("update Trabajadorbbdd set email = '" +trabajador.getEmail()+
-    				"' where  Nombre = '" + trabajador.getNombre() + "' and trab.NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
+    				"' where  Nombre = '" + trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
 			int result3 = query3.executeUpdate();
 			Query query4 = sesion.createQuery("update Trabajadorbbdd set CodigoCuenta = '" +trabajador.getCodigoCuenta()+
-    				"' where  Nombre = '" + trabajador.getNombre() + "' and trab.NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
+    				"' where  Nombre = '" + trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
 			int result4 = query4.executeUpdate();
-			Query query5 = sesion.createQuery("update Trabajadorbbdd set IdEmpresa = '" +trabajador.getEmpresas()+
-    				"' where  Nombre = '" + trabajador.getNombre() + "' and trab.NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
+			Query query5 = sesion.createQuery("update Trabajadorbbdd set IdEmpresa = '" +trabajador.getEmpresas().getId()+
+    				"' where  Nombre = '" + trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
 			int result5 = query5.executeUpdate();
 			Query query6 = sesion.createQuery("update Trabajadorbbdd set IdCategoria = '" +trabajador.getCategorias()+
-    				"' where  Nombre = '" + trabajador.getNombre() + "' and trab.NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
+    				"' where  Nombre = '" + trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
 			int result6 = query6.executeUpdate();
 			
 			Query query7 = sesion.createQuery("update Trabajadorbbdd set IBAN = '" +trabajador.getIban()+
-    				"' where  Nombre = '" + trabajador.getNombre() + "' and trab.NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
+    				"' where  Nombre = '" + trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
 			int result7 = query7.executeUpdate();
 			
 		}

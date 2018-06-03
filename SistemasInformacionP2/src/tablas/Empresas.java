@@ -76,5 +76,8 @@ public class Empresas implements java.io.Serializable {
 	public void setTrabajadorbbdds(Set trabajadorbbdds) {
 		this.trabajadorbbdds = trabajadorbbdds;
 	}
+	public int getId() {
+		return idEmpresa;
+	}
 
 }

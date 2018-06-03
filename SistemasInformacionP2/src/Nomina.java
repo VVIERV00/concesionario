@@ -138,6 +138,7 @@ public class Nomina{
 						}
 					} catch (Exception e) {
 						 //TODO: handle exception
+						e.printStackTrace();
 						System.err.println(e.getMessage()+" "+cont);
 					}
 					
@@ -298,7 +299,7 @@ public class Nomina{
 		Float sSocial = 0.0f; Float formacion = 0.0f; Float desempleo = 0.0f; Float irpf = 0.0f;
 		Float x = (Float)hoja2.get(5).get("Cuota obrera general TRABAJADOR") / (12*100);
 		sSocial = (brutoAnual[0] * x);
-		Float y = (Float)hoja2.get(5).get("Cuota formaciÃ³n TRABAJADOR") / (12*100);
+		Float y = (Float)hoja2.get(5).get("Cuota formación TRABAJADOR") / (12*100);
 		formacion = (brutoAnual[0] * y);
 		Float z = (Float)hoja2.get(5).get("Cuota desempleo TRABAJADOR") / (12*100);
 		desempleo = (brutoAnual[0] * z);
@@ -331,7 +332,9 @@ public class Nomina{
 
 		}
 		//System.out.println("buscado " + buscado);
+		System.out.println("EL buscado "+buscado);
 		irpfPer = (Float) hoja2.get(4).get(buscado);
+		System.out.println("a ver este "+irpfPer);
 		/*if(fila[3].contains("Clementina")) {
 			//System.out.println(set);
 			System.out.println("b " + buscado);
@@ -356,7 +359,9 @@ public class Nomina{
 
 			System.out.println("******irpPer " + (Float) hoja2.get(4).get(buscado));
 			System.out.println("******totalDevengos " + totaldevengos);//}*/
+		System.out.println("total dev "+totaldevengos);
 		irpf =  (totaldevengos * irpfPer)/100;
+		System.out.println("a ver este 2 "+irpf);
 
 		Float[] resultado = {sSocial, formacion, desempleo, irpf, x, y, z, irpfPer};
 		return resultado;
@@ -724,6 +729,7 @@ public class Nomina{
 			Trabajadorbbdd ultimaT =  ModelTrabajador.crear(sesion, ultimaC, ultimaE, 
 					fila[3], fila[1], fila[2], fila[0], 
 					fila[4], convertirFecha(fila[9]), fila[14], fila[16]);//, null//TODO set nominas
+			System.out.println(fecha);
 			ModelNomina.crear(sesion, ultimaT, fecha.getMonth()+1, fecha.getYear(), 
 					numeroTrienios, importeTrienios, importeSalarioMes, importeComplementoMes, 
 					valorProrrateo, brutoAnual, irpf, importeIrpf, baseEmpresario, 
