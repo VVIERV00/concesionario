@@ -50,7 +50,7 @@ public class ModelTrabajador {
 			Query query5 = sesion.createQuery("update Trabajadorbbdd set IdEmpresa = '" +trabajador.getEmpresas().getId()+
     				"' where  Nombre = '" + trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
 			int result5 = query5.executeUpdate();
-			Query query6 = sesion.createQuery("update Trabajadorbbdd set IdCategoria = '" +trabajador.getCategorias()+
+			Query query6 = sesion.createQuery("update Trabajadorbbdd set IdCategoria = '" +trabajador.getCategorias().getId()+
     				"' where  Nombre = '" + trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
 			int result6 = query6.executeUpdate();
 			

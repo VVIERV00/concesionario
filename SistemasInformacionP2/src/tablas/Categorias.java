@@ -105,5 +105,9 @@ public class Categorias implements java.io.Serializable {
 	public void setTrabajadorbbdds(Set trabajadorbbdds) {
 		this.trabajadorbbdds = trabajadorbbdds;
 	}
+	
+	public int getId() {
+		return idCategoria;
+	}
 
 }
