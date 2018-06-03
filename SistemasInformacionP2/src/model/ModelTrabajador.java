@@ -2,7 +2,6 @@ package model;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -12,23 +11,30 @@ import tablas.Empresas;
 import tablas.Trabajadorbbdd;
 
 public class ModelTrabajador {
-	public static Trabajadorbbdd crear(Session sesion, Integer categorias, 
-			Integer empresas, String nombre, String apellido1, String apellido2, String nifnie, 
+	public static Trabajadorbbdd crear(Session sesion, Categorias categorias, 
+			Empresas empresas, String nombre, String apellido1, String apellido2, String nifnie, 
 			String email, Date fechaAlta, String codigoCuenta, String iban) {
-		@SuppressWarnings("unchecked")
+		//System.out.println("CHUNGO "+ categorias);
+		List<Categorias> lista2 = sesion.createQuery("from Categorias where NombreCategoria = '" + categorias.getNombreCategoria()+"'").list();
+		List<Empresas> lista3 = sesion.createQuery("from Empresas where CIF = '" + empresas.getCif()+"'").list();
+		
+		Categorias objCat = sesion.load(Categorias.class, lista2.get(0).getIdCategoria());
+		Empresas objEmp = sesion.load(Empresas.class, lista3.get(0).getIdEmpresa());
+		//Trabajadorbbdd trabajador = new Trabajadorbbdd(objCat, objEmp, nombre, apellido1, nifnie);
+		Trabajadorbbdd trabajador = new Trabajadorbbdd(objCat, objEmp, nombre, apellido1, apellido2, nifnie, email, fechaAlta, codigoCuenta, iban);
+		
 		List<Trabajadorbbdd> lista = sesion.createQuery("from Trabajadorbbdd where Nombre = '" + 
-			nombre + "' and NIFNIE = '" + nifnie + "' and FechaAlta = '"+ fechaAlta+"'").list();
-		Categorias objCat = sesion.load(Categorias.class, categorias);
-		Empresas objEmp = sesion.load(Empresas.class, empresas);
-		Trabajadorbbdd trabajador = new Trabajadorbbdd(objCat, objEmp, nombre, apellido1, nifnie);
+			trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'").list();
 		/*Trabajadorbbdd trabajador = new Trabajadorbbdd(categorias, empresas, 
 				nombre, apellido1, apellido2, nifnie, email, fechaAlta, codigoCuenta, 
 				iban, nominas);*/
 		if (lista.size() == 0) {
+		
 			System.out.println("empieza asunto");
 			sesion.save(trabajador);
 			System.out.println("acaba asunto");
 		}else {
+		System.out.println("else");
 			Query query = sesion.createQuery("update Trabajadorbbdd set Apellido1 = '" +trabajador.getApellido1()+
     				"' where  Nombre = '" + trabajador.getNombre() + "' and trab.NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'");
 			int result = query.executeUpdate();
@@ -53,6 +59,9 @@ public class ModelTrabajador {
 			int result7 = query7.executeUpdate();
 			
 		}
+		/*List<Trabajadorbbdd> listaFinal = sesion.createQuery("from Trabajadorbbdd where Nombre = '" + 
+			trabajador.getNombre() + "' and NIFNIE = '" + trabajador.getNifnie() + "' and FechaAlta = '"+ trabajador.getFechaAlta()+"'").list();
+		return listaFinal.get(0);*/
 		return trabajador;
 	}
 }

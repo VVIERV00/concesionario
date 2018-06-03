@@ -13,8 +13,8 @@ public class ModelCategoria {
 		//Filter filter = sesion.enableFilter("filtroCategorias");
 		//filter.setParameter("nombre", nombre);
 		//Categorias filtro = sesion.get(Categorias.class, "s");
-		List<Categorias> lista = sesion.createQuery("from Categorias where NombreCategoria = '" + nombre+"'").list();
 		Categorias categoria = new Categorias(nombre, salarioBase, complemento);
+		List<Categorias> lista = sesion.createQuery("from Categorias where NombreCategoria = '" + categoria.getNombreCategoria()+"'").list();
 
 		if (lista.size() == 0) {
 			sesion.save(categoria);

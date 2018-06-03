@@ -31,20 +31,22 @@ import utils.SesionHibernate;
 
 
 public class Nomina{
+	//private Session sesion = null;
+	//private Transaction tx = null;
 	private  String rutaDatosNomina;
 	private String rutaDatos;
 	private Date fecha;
 	private Float irpfPer = 0.0f;
 
 	public static void main(String[] args) {
-		/*String[][] foo = null;
+		String[][] foo = null;
 		try {
 			foo = new ReadWriteExcelFile().readXLSXFile("SistemasInformacionII.xlsx");
 		} catch (IOException e) {
 			System.out.println("problema: " + e);
 		}
-		Nomina objeto = new Nomina(foo,"SistemasInformacionII.xlsx", new Date(2012,04,01));
-		objeto.generar();*/
+		Nomina objeto = new Nomina(foo[0][0],"SistemasInformacionII.xlsx", new Date(2012,04,01));
+		objeto.generar();
 
 	}
 
@@ -122,6 +124,9 @@ public class Nomina{
 				}
 			}
 			int cont =0;
+			//sesion = SesionHibernate.getSesion().openSession();
+			//tx = sesion.beginTransaction();
+
 			for (String[] fila: hoja1) {
 				cont++;
 				if (!fila.equals(hoja1[0])){
@@ -138,6 +143,9 @@ public class Nomina{
 					
 				}
 			}
+			
+			//sesion.close();
+			System.out.println("FIN DEL PROGRAMA");
 		} catch (IOException e) {
 			System.out.println("Error al leer del excel: " + e.toString());
 		}
@@ -708,18 +716,14 @@ public class Nomina{
 			//System.out.println("PDF CREADO");
 			double brutoAnual = salarioAnual[0];
 			System.out.println("Empieza la sesion hibernate");
-
 			Session sesion = SesionHibernate.getSesion().openSession();
 			Transaction tx = sesion.beginTransaction();
-			
-			Categorias ultimaC = ModelCategoria.crear(sesion, fila[5], Double.valueOf((Integer) hoja2.get(1).get(fila[5])), complementoYAntiguedad[0].doubleValue());
-			tx.commit();
+			System.out.println("valores categoria: " + fila[5] + " --- " + hoja2.get(0).get(fila[5])+ " --- " + complementoYAntiguedad[0].doubleValue());
+			Categorias ultimaC = ModelCategoria.crear(sesion, fila[5], Double.valueOf((Integer) hoja2.get(0).get(fila[5])), complementoYAntiguedad[0].doubleValue());
 			Empresas ultimaE = ModelEmpresa.crear(sesion, fila[6], fila[7]);
-			tx.commit();
-			Trabajadorbbdd ultimaT =  ModelTrabajador.crear(sesion, ultimaC.getIdCategoria(), ultimaE.getIdEmpresa(), 
+			Trabajadorbbdd ultimaT =  ModelTrabajador.crear(sesion, ultimaC, ultimaE, 
 					fila[3], fila[1], fila[2], fila[0], 
 					fila[4], convertirFecha(fila[9]), fila[14], fila[16]);//, null//TODO set nominas
-			tx.commit();
 			ModelNomina.crear(sesion, ultimaT, fecha.getMonth()+1, fecha.getYear(), 
 					numeroTrienios, importeTrienios, importeSalarioMes, importeComplementoMes, 
 					valorProrrateo, brutoAnual, irpf, importeIrpf, baseEmpresario, 

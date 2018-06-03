@@ -26,7 +26,7 @@ public class Principal {
 		List<Empresas> lista2 = sesion.createQuery("from Empresas where CIF = 'P2463928T'").list();
 
 		
-		ModelTrabajador.crear(sesion, lista.get(0).getIdCategoria(), lista2.get(0).getIdEmpresa(), "fernando", "asuncion", 
+		ModelTrabajador.crear(sesion, lista.get(0), lista2.get(0), "fernandrrr", "asuncion", 
 				"71404629W", "71404629W","sd", new Date("20/10/2015"), "ese","aquel");
 		System.out.println("acaba");
 		
