@@ -22,8 +22,8 @@ public class ModelNomina {
 		
 		Nomina nomina = new Nomina(trabajadorbbdd, mes, anio, numeroTrienios, importeTrienios, importeSalarioMes, importeComplementoMes, valorProrrateo, brutoAnual, irpf, importeIrpf, baseEmpresario, seguridadSocialEmpresario, importeSeguridadSocialEmpresario, desempleoEmpresario, importeDesempleoEmpresario, formacionEmpresario, importeFormacionEmpresario, accidentesTrabajoEmpresario, importeAccidentesTrabajoEmpresario, fogasaempresario, importeFogasaempresario, seguridadSocialTrabajador, importeSeguridadSocialTrabajador, desempleoTrabajador, importeDesempleoTrabajador, formacionTrabajador, importeFormacionTrabajador, brutoNomina, liquidoNomina, costeTotalEmpresario);
 		@SuppressWarnings("unchecked")
-		List<Nomina> lista = sesion.createQuery("from nomina where Mes = '" + nomina.getMes() + 
-				"' and Anio = '" + nomina.getAnio()+ "' and IdTrabajador = '" + trabajadorbbdd.getIdTrabajador() + "' and nom.BrutoNomina = '" + 
+		List<Nomina> lista = sesion.createQuery("from Nomina where Mes = '" + nomina.getMes() + 
+				"' and Anio = '" + nomina.getAnio()+ "' and IdTrabajador = '" + trabajadorbbdd.getIdTrabajador() + "' and BrutoNomina = '" + 
 				nomina.getBrutoNomina() + "' and LiquidoNomina = '" + nomina.getLiquidoNomina()+ "'").list();
 		if (lista.size() == 0) {
 			sesion.save(nomina);

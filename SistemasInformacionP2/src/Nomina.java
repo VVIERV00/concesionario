@@ -715,10 +715,10 @@ public class Nomina{
 			writer.close();
 			//System.out.println("PDF CREADO");
 			double brutoAnual = salarioAnual[0];
-			System.out.println("Empieza la sesion hibernate");
+			//System.out.println("Empieza la sesion hibernate");
 			Session sesion = SesionHibernate.getSesion().openSession();
 			Transaction tx = sesion.beginTransaction();
-			System.out.println("valores categoria: " + fila[5] + " --- " + hoja2.get(0).get(fila[5])+ " --- " + complementoYAntiguedad[0].doubleValue());
+			//System.out.println("valores categoria: " + fila[5] + " --- " + hoja2.get(0).get(fila[5])+ " --- " + complementoYAntiguedad[0].doubleValue());
 			Categorias ultimaC = ModelCategoria.crear(sesion, fila[5], Double.valueOf((Integer) hoja2.get(0).get(fila[5])), complementoYAntiguedad[0].doubleValue());
 			Empresas ultimaE = ModelEmpresa.crear(sesion, fila[6], fila[7]);
 			Trabajadorbbdd ultimaT =  ModelTrabajador.crear(sesion, ultimaC, ultimaE, 
@@ -735,7 +735,7 @@ public class Nomina{
 					importeFormacionTrabajador, brutoNomina, liquidoNomina, costeTotalEmpresario);
 			tx.commit();
 			sesion.close();
-			System.out.println("Acaba la sesion hibernate");
+			//System.out.println("Acaba la sesion hibernate");
 		}
 
 		catch (Exception e) {
