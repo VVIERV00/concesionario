@@ -37,6 +37,7 @@ public class NominaG{
 	private String rutaDatos;
 	private Date fecha;
 	private Float irpfPer = 0.0f;
+	private int cont;
 
 	public static void main(String[] args) {
 		String[][] foo = null;
@@ -54,6 +55,7 @@ public class NominaG{
 		this.rutaDatosNomina = rutaDatosNominas;
 		this.rutaDatos = rutaDatos;
 		this.fecha = fecha;
+		this.cont=0;
 	}
 	public void generar() {
 		ReadWriteExcelFile excel = new ReadWriteExcelFile();
@@ -123,7 +125,7 @@ public class NominaG{
 					// TODO: handle exception
 				}
 			}
-			int cont =0;
+			cont =0;
 			//sesion = SesionHibernate.getSesion().openSession();
 			//tx = sesion.beginTransaction();
 
@@ -308,7 +310,9 @@ public class NominaG{
 		Set set = hoja2.get(4).keySet();
 		//System.out.println(hoja2.get(4).keySet());
 		Iterator iterador = set.iterator();
-		
+		if(cont==7) {
+			System.out.println("paro");
+		}
 		Integer buscado = 0;
 		
 		while (iterador.hasNext()) {
@@ -317,12 +321,16 @@ public class NominaG{
 			if(brutoAnual[0]<1200) {
 				buscado = 1200;
 				break;
+			}else if(brutoAnual[0]>60000) {
+				buscado = 60000;
+				break;
 			}else if ((t - brutoAnual[0]) < 1000 && (t - brutoAnual[0]) >= 0 ) {
 				buscado = t;
 				break;
 			}
 
 		}
+		
 		System.out.println("EL buscado "+buscado);
 		irpfPer = (Float) hoja2.get(4).get(buscado);
 		System.out.println("a ver este "+irpfPer);
